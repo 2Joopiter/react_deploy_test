@@ -14,7 +14,6 @@ export default function App() {
 	return (
 		<>
 			<Header />
-
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
 			<Route path='/Contact' component={Contact} />
