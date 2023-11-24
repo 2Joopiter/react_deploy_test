@@ -31,7 +31,7 @@ export default function Header() {
 				</li>
 				<li>
 					<NavLink to='/members' activeClassName={'on'}>
-						Members
+						Member
 					</NavLink>
 				</li>
 				<li>

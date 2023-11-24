@@ -9,6 +9,8 @@ import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 
 import { Route } from 'react-router-dom';
+import './globalStyles/Variables.scss';
+import './globalStyles/Reset.scss';
 
 export default function App() {
 	return (
