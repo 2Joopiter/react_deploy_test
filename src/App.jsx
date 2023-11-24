@@ -8,20 +8,21 @@ import Members from './components/sub/members/Members';
 import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 
-function App() {
+import { Route } from 'react-router-dom';
+
+export default function App() {
 	return (
 		<>
 			<Header />
-			<MainWrap />
-			<Community />
-			<Contact />
-			<Department />
-			<Gallery />
-			<Members />
-			<Youtube />
+
+			<Route exact path='/' component={MainWrap} />
+			<Route path='/Community' component={Community} />
+			<Route path='/Contact' component={Contact} />
+			<Route path='/Department' component={Department} />
+			<Route path='/Gallery' component={Gallery} />
+			<Route path='/Members' component={Members} />
+			<Route path='/Youtube' component={Youtube} />
 			<Footer />
 		</>
 	);
 }
-
-export default App;
