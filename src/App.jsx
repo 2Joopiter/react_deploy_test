@@ -14,11 +14,11 @@ import './globalStyles/Reset.scss';
 import { useState } from 'react';
 
 export default function App() {
-	const [Dark, setDark] = useState(false);
+	const [Dark, setDark] = useState();
 
 	return (
 		<div className={Dark ? 'wrap dark' : 'wrap'}>
-			<Header />
+			<Header Dark={Dark} setDark={setDark} />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
 			<Route path='/Contact' component={Contact} />
