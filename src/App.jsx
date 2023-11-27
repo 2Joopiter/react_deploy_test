@@ -11,10 +11,13 @@ import Footer from './components/common/footer/Footer';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
+import { useState } from 'react';
 
 export default function App() {
+	const [Dark, setDark] = useState(false);
+
 	return (
-		<>
+		<div className={Dark ? 'wrap dark' : 'wrap'}>
 			<Header />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
@@ -24,6 +27,6 @@ export default function App() {
 			<Route path='/Members' component={Members} />
 			<Route path='/Youtube' component={Youtube} />
 			<Footer />
-		</>
+		</div>
 	);
 }
