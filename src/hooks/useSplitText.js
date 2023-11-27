@@ -1,12 +1,12 @@
 export function useSplitText() {
-	return (ref, txt) => {
+	return (ref, txt, speed = 0, interval = 0) => {
 		let tags = '';
+		let count = 0;
 
 		for (let letter of txt) {
-			tags += `<span>${letter}</span>`;
+			tags += `<span style='transition-duration: ${speed}s; transition-delay:${interval * count}s; display: inline-block;'>${letter}</span>`;
+			count++;
 		}
-
-		console.log(tags);
 		ref.innerHTML = tags;
 	};
 }

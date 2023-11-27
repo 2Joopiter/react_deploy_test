@@ -9,8 +9,10 @@ export default function Layout({ children, title }) {
 	const splitText = useSplitText();
 
 	useEffect(() => {
-		splitText(refTitle.current, title);
-		refFrame.current.classList.add('on');
+		splitText(refTitle.current, title, 0.7, 0.1);
+		setTimeout(() => {
+			refFrame.current.classList.add('on');
+		}, 300);
 	}, []);
 
 	return (
