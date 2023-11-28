@@ -26,7 +26,7 @@ export default function Department() {
 	return (
 		<Layout title={'Department'}>
 			<section className='memberBox'>
-				<h2>{combinedTitle(MemberTit, '-')}</h2>
+				<h2>{combinedTitle(MemberTit)}</h2>
 				{MemberData.map((member, idx) => {
 					return (
 						<article key={member + idx}>
