@@ -1,14 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
+import { useCustomText } from '../../../hooks/useText';
 
 export default function Department() {
-	//const test = 'abcdef';
-	//console.log(test.charAt(0)); = a를 반환
-	//console.log(test.slice(1, 3)); // bc를 반환
-	//console.log(test.slice(1)); // bcdef 반환
-	//console.log(test.toUpperCase()); // 전체 대문자 반환
-
+	const changeTitle = useCustomText('title');
 	const [MemberData, setMemberData] = useState([]);
 	const path = useRef(process.env.PUBLIC_URL);
 
@@ -33,7 +29,7 @@ export default function Department() {
 	return (
 		<Layout title={'Department'}>
 			<section className='memberBox'>
-				<h2>{`${MemberTit.charAt(0).toUpperCase() + MemberTit.slice(1)}`}</h2>
+				<h2>{changeTitle(MemberTit)}</h2>
 				{MemberData.map((member, idx) => {
 					return (
 						<article key={member + idx}>
