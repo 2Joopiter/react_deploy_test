@@ -8,9 +8,15 @@ export default function Department() {
 	const [MemberTit, setMemberTit] = useState('');
 	const path = useRef(process.env.PUBLIC_URL);
 	const changeTitle = useCustomText('title');
-	const shortenText = useCustomText('shorten');
-	const text1 = 'abcdef';
-	console.log(shortenText(text1, 3));
+
+	const test1 = 'our-members';
+	console.log(test1.split('-')); // ['our','member']로 - 를 기준으로 단어를 나눠줌
+	const [forward, backward] = test1.split('-');
+	console.log(changeTitle(forward) + '' + changeTitle(backward)); // 'Our Members' 출력
+
+	const combinedTitle = useCustomText('combined');
+	const test2 = 'our-members-score';
+	console.log(combinedTitle(test2, '-'));
 
 	const fetchDepartment = () => {
 		fetch(`${path.current}/DB/department.json`)
