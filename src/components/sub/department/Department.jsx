@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 
@@ -10,11 +10,12 @@ export default function Department() {
 	//console.log(test.toUpperCase()); // 전체 대문자 반환
 
 	const [MemberData, setMemberData] = useState([]);
-	const path = process.env.PUBLIC_URL; // public 폴더까지의 경로를 구해주는 구문
+	const path = useRef(process.env.PUBLIC_URL);
+
 	const [MemberTit, setMemberTit] = useState('');
 
 	const fetchDepartment = () => {
-		fetch(`${path}/DB/department.json`)
+		fetch(`${path.current}/DB/department.json`)
 			.then((data) => data.json())
 			.then((json) => {
 				console.log(json);
@@ -32,7 +33,7 @@ export default function Department() {
 	return (
 		<Layout title={'Department'}>
 			<section className='memberBox'>
-				<h2>{`${MemberTit.charAt(0).toUpperCase() + MemberTit.slice(1g)}`}</h2>
+				<h2>{`${MemberTit.charAt(0).toUpperCase() + MemberTit.slice(1)}`}</h2>
 				{MemberData.map((member, idx) => {
 					return (
 						<article key={member + idx}>
