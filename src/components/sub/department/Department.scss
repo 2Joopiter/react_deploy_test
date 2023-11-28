@@ -16,6 +16,9 @@
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-between;
+			padding-left: 80px;
+			border-left: 1px solid transparent;
+			border-image: radial-gradient(rgba(var(--baseColor-code), 0.3), 90%, transparent) 1;
 
 			article {
 				width: 31%;
