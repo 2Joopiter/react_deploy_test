@@ -41,9 +41,26 @@
 			transition: 0.7s;
 		}
 	}
+
+	.menuToggle {
+		display: none;
+	}
 	.themeBox.dark {
 		.ball {
 			left: 36px;
+		}
+	}
+}
+
+.tablet,
+.mobile {
+	.Header {
+		width: 80vw;
+		ul {
+			display: none;
+		}
+		.menuToggle {
+			display: block;
 		}
 	}
 }
