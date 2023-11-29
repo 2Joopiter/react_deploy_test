@@ -12,12 +12,13 @@ import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
 import { useState } from 'react';
+import { useMedia } from './hooks/useMedia';
 
 export default function App() {
 	const [Dark, setDark] = useState();
 
 	return (
-		<div className={Dark ? 'wrap dark' : 'wrap'}>
+		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
 			<Header Dark={Dark} setDark={setDark} />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
