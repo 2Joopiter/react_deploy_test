@@ -26,11 +26,11 @@ export function useCustomText(type) {
 		};
 	}
 	if (type === 'combined') {
-		return (txt) => {
+		return (txt, spc = ' ') => { // spc라는 인수를 추가해서 원하는 기호로 이어붙이도록. 값이 없으면 기본값은 여백(' ')으로 설정
 			const resultText = txt
 				.split(/-|_|\+/)
 				.map((data) => toUpperText(data))
-				.join(' ');
+				.join(spc);
 			return resultText;
 		};
 	}
