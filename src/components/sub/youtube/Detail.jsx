@@ -23,12 +23,14 @@ export default function Detail() {
 	return (
 		<Layout title={'Detail'}>
 			<h3>{YoutubeData?.title}</h3>
-			{/* Optional chaing: 객체명?.property
-      해당 객체에 값이 없으면 무시하고 값이 있을때만 property 접근 (선택적 호출)*/}
-			<div className='videoBox'>
-				<iframe src={`https://www.youtube.com/embed/${YoutubeData?.resourceId.videoId}`} title={YoutubeData?.title}></iframe>
-			</div>
-			<p>{YoutubeData?.description}</p>
+			{YoutubeData && (
+				<article>
+					<div className='videoBox'>
+						<iframe src={`https://www.youtube.com/embed/${YoutubeData.resourceId.videoId}`} title={YoutubeData.title}></iframe>
+					</div>
+					<p>{YoutubeData.description}</p>
+				</article>
+			)}
 		</Layout>
 	);
 }
