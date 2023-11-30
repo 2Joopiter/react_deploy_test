@@ -35,10 +35,10 @@ export default function Youtube() {
 
 				return (
 					<article key={data.id}>
-						<h2>{shortenText(data.snippet.title, 50)}</h2>
+						<h2>{shortenText(data.snippet.title, 25)}</h2>
 
 						<div className='txt'>
-							<p>{shortenText(data.snippet.description, 250)}</p>
+							<p>{shortenText(data.snippet.description, 200)}</p>
 							<div className='infoBox'>
 								<span>{customText(date, '.')}</span>
 								<em>{time.split('Z')[0]}</em>
@@ -46,7 +46,7 @@ export default function Youtube() {
 						</div>
 
 						<div className='pic'>
-							<img src={data.snippet.thumbnails.standard.url} alt={data.snippet.title} />
+							<img src={data.snippet.thumbnails.standard ? data.snippet.thumbnails.standard.url : '/img/member1.jpg'} alt={data.snippet.title} />
 						</div>
 					</article>
 				);
