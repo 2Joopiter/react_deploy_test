@@ -8,6 +8,7 @@ import Members from './components/sub/members/Members';
 import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 import Menu from './components/common/menu/Menu';
+import Detail from './components/sub/youtube/Detail';
 
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
@@ -29,6 +30,7 @@ export default function App() {
 			<Route path='/Gallery' component={Gallery} />
 			<Route path='/Members' component={Members} />
 			<Route path='/Youtube' component={Youtube} />
+			<Route path='/Detail/:id' component={Detail} />
 			<Footer />
 			{Toggle && <Menu setToggle={setToggle} />}
 		</div>
