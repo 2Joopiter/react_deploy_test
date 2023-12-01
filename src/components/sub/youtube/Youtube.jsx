@@ -8,11 +8,10 @@ export default function Youtube() {
 	const customText = useCustomText('combined');
 	const shortenText = useCustomText('shorten');
 	const [Vids, setVids] = useState([]);
-	console.log(Vids);
 
 	const fetchYoutube = async () => {
-		const api_key = 'AIzaSyBCqSk4zIkhEpjHpiWBU8U5ZbT7HiSItqc';
-		const pid = 'PL7mCE55Wm-dixtLfubWtcGFp5lge1UHKA';
+		const api_key = process.env.REACT_APP_YOUTUBE_API;
+		const pid = process.env.REACT_APP_YOUTUBE_LIST;
 		const num = 10;
 		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${api_key}&part=snippet&playlistId=${pid}&maxResults=${num}`;
 
@@ -31,15 +30,15 @@ export default function Youtube() {
 
 	return (
 		<Layout title={'Youtube'}>
-			{Vids.map((data, idx) => {
+			{Vids.map((data) => {
 				const [date, time] = data.snippet.publishedAt.split('T');
 
 				return (
 					<article key={data.id}>
-						<h2>{shortenText(data.snippet.title, 25)}</h2>
+						<h2>{shortenText(data.snippet.title, 50)}</h2>
 
 						<div className='txt'>
-							<p>{shortenText(data.snippet.description, 200)}</p>
+							<p>{shortenText(data.snippet.description, 250)}</p>
 							<div className='infoBox'>
 								<span>{customText(date, '.')}</span>
 								<em>{time.split('Z')[0]}</em>
@@ -47,8 +46,8 @@ export default function Youtube() {
 						</div>
 
 						<div className='pic'>
-							<Link to={`/Detail/${data.id}`}>
-								<img src={data.snippet.thumbnails.standard ? data.snippet.thumbnails.standard.url : '/img/member1.jpg'} alt={data.snippet.title} />
+							<Link to={`/detail/${data.id}`}>
+								<img src={data.snippet.thumbnails.standard.url} alt={data.snippet.title} />
 							</Link>
 						</div>
 					</article>
