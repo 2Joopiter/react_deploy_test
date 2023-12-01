@@ -1,12 +1,19 @@
 .Gallery {
+	--gap: 20px;
+	--colNum: 4;
+
 	.frame {
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-between;
+		justify-content: flex-start;
+		gap: var(--gap);
 
 		article {
-			width: 23%;
+			//사이간격 고정값 쓰는 경우
+			// 각 박스 넓이값 : 전체 넓이값에서 사이간격의 총 넓이를 빼주고 다시 컬럼수만큼 나누기
+			//calc((부모넓이값 - 사이간격 * 사이간격 수) / 컬럼수)
+			width: calc((100% - var(--gap) * var(--colNum-1)) / var(--colNum));
 			margin-bottom: 70px;
 			border-bottom: 1px solid rgba(var(--baseColor-code), 0.5);
 
@@ -47,26 +54,20 @@
 //laptop
 .laptop {
 	.Gallery {
-		article {
-			width: 32%;
-		}
+		--colNum: 3;
 	}
 }
 
 //tablet
 .tablet {
 	.Gallery {
-		article {
-			width: 48%;
-		}
+		--colNum: 2;
 	}
 }
 
 //mobile
 .mobile {
 	.Gallery {
-		article {
-			width: 100%;
-		}
+		--colNum: 1;
 	}
 }
