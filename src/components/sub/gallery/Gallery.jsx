@@ -8,33 +8,27 @@ export default function Gallery() {
 	const myID = useRef('199646606@N06');
 	const refNav = useRef(null);
 	const isUser = useRef(myID.current);
-	// 1. isUser의 초기값을 내 아이디 문자값으로 등록
 
 	const activateBtn = (e) => {
 		const btns = refNav.current.querySelectorAll('button');
 		btns.forEach((btn) => btn.classList.remove('on'));
 		e && e.target.classList.add('on');
 	};
-
 	const handleInterest = (e) => {
 		if (e.target.classList.contains('on')) return;
-		// 2. interest 함수 호출시 isUser값을 빈 문자열로 초기화(=false로 인식되는 값)
 		isUser.current = '';
 		activateBtn(e);
 		fetchFlickr({ type: 'interest' });
 	};
 	const handleMine = (e) => {
 		if (e.target.classList.contains('on') || isUser.current === myID.current) return;
-		// 3. 콕 지정해서 isUser의 값과 myID의 값이 동일할때만 이벤트 함수 호출 중지
-		// 마이갤러리 함수 호출시에는 isUser의 문자값이 담겨있다고 하더라도 내 아이디와 같지 않으면 핸들러 함수를 실행하게 처리
-		// 그 이유는 다른 사용자의 갤러리에 갔다가 다시 myGallery 호출시 이미 다른 사용자의 유저 id가 있어 내 갤러리가 호출되지 않는 문제를 해결하기 위함
+
 		isUser.current = myID.current;
 		activateBtn(e);
 		fetchFlickr({ type: 'user', id: myID.current });
 	};
 	const handleUser = (e) => {
 		if (isUser.current) return;
-		// 4. isUser값이 비어있기만 하면 함수 호출 중지
 		isUser.current = e.target.innerText;
 		activateBtn();
 		fetchFlickr({ type: 'user', id: e.target.innerText });
@@ -46,7 +40,9 @@ export default function Gallery() {
 		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
 		const method_interest = 'flickr.interestingness.getList';
 		const method_user = 'flickr.people.getPhotos';
+		const method_search = 'flickr.photos.search';
 		const interestURL = `${baseURL}${method_interest}`;
+		const searchURL = `${baseURL}${method_search}&tags=${opt.keyword}`;
 
 		const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
 
@@ -54,6 +50,7 @@ export default function Gallery() {
 
 		opt.type === 'user' && (url = userURL);
 		opt.type === 'interest' && (url = interestURL);
+		opt.type === 'search' && (url = searchURL);
 
 		const data = await fetch(url);
 		const json = await data.json();
@@ -61,7 +58,8 @@ export default function Gallery() {
 	};
 
 	useEffect(() => {
-		fetchFlickr({ type: 'user', id: myID.current });
+		//fetchFlickr({ type: 'user', id: myID.current });
+		fetchFlickr({ type: 'search', keyword: '고양이' });
 	}, []);
 
 	return (
