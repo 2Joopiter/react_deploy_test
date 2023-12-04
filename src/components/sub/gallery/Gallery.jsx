@@ -1,32 +1,57 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Masonry from 'react-masonry-component';
 import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
 
 export default function Gallery() {
 	const [Pics, setPics] = useState([]);
+	const myID = useRef('199646606@N06');
 
-	const fetchFlickr = async () => {
+	const fetchFlickr = async (opt) => {
 		const num = 30;
-		const myID = '199646606@N06';
 		const flickr_api = process.env.REACT_APP_FLICKR_API;
 		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
 		const method_interest = 'flickr.interestingness.getList';
 		const method_user = 'flickr.people.getPhotos';
 		const interestURL = `${baseURL}${method_interest}`;
-		const userURL = `${baseURL}${method_user}&user_id=${myID}`;
 
-		const data = await fetch(userURL);
+		const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
+
+		let url = '';
+
+		opt.type === 'user' && (url = userURL);
+		opt.type === 'interest' && (url = interestURL);
+
+		const data = await fetch(url);
 		const json = await data.json();
 		setPics(json.photos.photo);
 	};
 
 	useEffect(() => {
-		fetchFlickr();
+		fetchFlickr({ type: 'user', id: myID.current });
 	}, []);
 
 	return (
 		<Layout title={'Gallery'}>
+			<article className='controls'>
+				<nav className='btnSet'>
+					<button
+						onClick={() => {
+							fetchFlickr({ type: 'interest' });
+						}}
+					>
+						Interest Gallery
+					</button>
+					<button
+						onClick={() => {
+							fetchFlickr({ type: 'user', id: myID.current });
+						}}
+					>
+						My Gallery
+					</button>
+				</nav>
+			</article>
+
 			<section>
 				<Masonry className={'frame'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
 					{Pics.map((pic, idx) => {
@@ -46,7 +71,7 @@ export default function Gallery() {
 										alt='사용자 프로필 이미지'
 										onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
 									/>
-									<span>{pic.owner}</span>
+									<span onClick={() => fetchFlickr({ type: 'user', id: pic.owner })}>{pic.owner}</span>
 								</div>
 							</article>
 						);
