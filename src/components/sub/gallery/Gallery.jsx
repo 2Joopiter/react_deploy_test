@@ -26,6 +26,8 @@ export default function Gallery() {
 	const handleMine = (e) => {
 		if (e.target.classList.contains('on') || isUser.current === myID.current) return;
 		// 3. 콕 지정해서 isUser의 값과 myID의 값이 동일할때만 이벤트 함수 호출 중지
+		// 마이갤러리 함수 호출시에는 isUser의 문자값이 담겨있다고 하더라도 내 아이디와 같지 않으면 핸들러 함수를 실행하게 처리
+		// 그 이유는 다른 사용자의 갤러리에 갔다가 다시 myGallery 호출시 이미 다른 사용자의 유저 id가 있어 내 갤러리가 호출되지 않는 문제를 해결하기 위함
 		isUser.current = myID.current;
 		activateBtn(e);
 		fetchFlickr({ type: 'user', id: myID.current });
