@@ -7,6 +7,8 @@ export default function Gallery() {
 	const [Pics, setPics] = useState([]);
 	const myID = useRef('199646606@N06');
 	const refNav = useRef(null);
+	const isUser = useRef(myID.current);
+	// 1. isUser의 초기값을 내 아이디 문자값으로 등록
 
 	const activateBtn = (e) => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -16,15 +18,22 @@ export default function Gallery() {
 
 	const handleInterest = (e) => {
 		if (e.target.classList.contains('on')) return;
+		// 2. interest 함수 호출시 isUser값을 빈 문자열로 초기화(=false로 인식되는 값)
+		isUser.current = '';
 		activateBtn(e);
 		fetchFlickr({ type: 'interest' });
 	};
 	const handleMine = (e) => {
-		if (e.target.classList.contains('on')) return;
+		if (e.target.classList.contains('on') || isUser.current === myID.current) return;
+		// 3. 콕 지정해서 isUser의 값과 myID의 값이 동일할때만 이벤트 함수 호출 중지
+		isUser.current = myID.current;
 		activateBtn(e);
 		fetchFlickr({ type: 'user', id: myID.current });
 	};
 	const handleUser = (e) => {
+		if (isUser.current) return;
+		// 4. isUser값이 비어있기만 하면 함수 호출 중지
+		isUser.current = e.target.innerText;
 		activateBtn();
 		fetchFlickr({ type: 'user', id: e.target.innerText });
 	};
