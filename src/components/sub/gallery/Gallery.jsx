@@ -73,7 +73,7 @@ export default function Gallery() {
 				</nav>
 
 				<form>
-					<input type='text' placeholder='search' />
+					<input type='text' placeholder='Search' />
 					<LuSearch className='btnSearch' />
 				</form>
 			</article>
