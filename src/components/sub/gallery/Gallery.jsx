@@ -10,6 +10,7 @@ export default function Gallery() {
 	const myID = useRef('199646606@N06');
 	const refNav = useRef(null);
 	const isUser = useRef(myID.current);
+	const [Open, setOpen] = useState(false);
 
 	const activateBtn = (e) => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -99,14 +100,13 @@ export default function Gallery() {
 
 				<section>
 					<Masonry className={'frame'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
-						{/* 3항 연산자로 배열에 받아지는 값이 없으면 경고문구 출력. 주의점-3항연산자로 JSX를 분기처리시에는 각각의 항목을 괄호로 묶어줘야 함 */}
 						{Pics.length === 0 ? (
 							<h2>해당 키워드에 해당하는 검색 결과가 없습니다.</h2>
 						) : (
 							Pics.map((pic, idx) => {
 								return (
 									<article key={pic.id}>
-										<div className='pic'>
+										<div className='pic' onClick={() => setOpen(true)}>
 											<img
 												src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_m.jpg`}
 												alt={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_b.jpg`}
@@ -130,7 +130,7 @@ export default function Gallery() {
 				</section>
 			</Layout>
 
-			<Modal />
+			{Open && <Modal setOpen={setOpen} />}
 		</>
 	);
 }
