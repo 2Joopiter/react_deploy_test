@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Masonry from 'react-masonry-component';
 import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
+import { LuSearch } from 'react-icons/lu';
 
 export default function Gallery() {
 	const [Pics, setPics] = useState([]);
@@ -43,7 +44,6 @@ export default function Gallery() {
 		const method_search = 'flickr.photos.search';
 		const interestURL = `${baseURL}${method_interest}`;
 		const searchURL = `${baseURL}${method_search}&tags=${opt.keyword}`;
-
 		const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
 
 		let url = '';
@@ -59,7 +59,7 @@ export default function Gallery() {
 
 	useEffect(() => {
 		//fetchFlickr({ type: 'user', id: myID.current });
-		fetchFlickr({ type: 'search', keyword: '고양이' });
+		fetchFlickr({ type: 'search', keyword: '고양이' }); // '고양이' 키워드로 검색 타입 갤러리 호출
 	}, []);
 
 	return (
@@ -71,6 +71,11 @@ export default function Gallery() {
 						My Gallery
 					</button>
 				</nav>
+
+				<form>
+					<input type='text' placeholder='search' />
+					<LuSearch className='btnSearch' />
+				</form>
 			</article>
 
 			<section>
