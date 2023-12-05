@@ -59,8 +59,11 @@
 			}
 
 			.btnSearch {
+				border: none;
+				background-color: transparent;
 				font-size: 1.2rem;
 				color: var(--baseColor);
+				cursor: pointer;
 			}
 		}
 	}
