@@ -23,7 +23,6 @@ export default function Gallery() {
 	};
 	const handleMine = (e) => {
 		if (e.target.classList.contains('on') || isUser.current === myID.current) return;
-
 		isUser.current = myID.current;
 		activateBtn(e);
 		fetchFlickr({ type: 'user', id: myID.current });
@@ -36,11 +35,11 @@ export default function Gallery() {
 	};
 
 	const handleSearch = (e) => {
-		// 기본적으로 Submit 이벤트는 전송기능이기 때문에 무조건 화면이 새로고침됨
-		// 우리는 직접 전송을 할게 아니라 리액트로 추가 로직 구현을 할 것이므로 기본 전송기능은 막아줌
 		e.preventDefault();
+		isUser.current = '';
+		activateBtn();
 		const keyword = e.target.children[0].value;
-		console.log(keyword);
+		fetchFlickr({ type: 'search', keyword: keyword });
 	};
 
 	const fetchFlickr = async (opt) => {
@@ -66,8 +65,8 @@ export default function Gallery() {
 	};
 
 	useEffect(() => {
-		//fetchFlickr({ type: 'user', id: myID.current });
-		fetchFlickr({ type: 'search', keyword: '고양이' }); // '고양이' 키워드로 검색 타입 갤러리 호출
+		fetchFlickr({ type: 'user', id: myID.current });
+		//fetchFlickr({ type: 'search', keyword: '고양이' }); // '고양이' 키워드로 검색 타입 갤러리 호출
 	}, []);
 
 	return (
