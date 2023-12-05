@@ -39,6 +39,8 @@ export default function Gallery() {
 		isUser.current = '';
 		activateBtn();
 		const keyword = e.target.children[0].value;
+		if (!keyword.trim()) return;
+		e.target.children[0].value = '';
 		fetchFlickr({ type: 'search', keyword: keyword });
 	};
 
