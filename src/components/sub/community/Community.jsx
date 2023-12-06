@@ -1,10 +1,28 @@
 import Layout from '../../common/layout/Layout';
 import './Community.scss';
+import { MdClose } from 'react-icons/md';
+import { IoMdCreate } from 'react-icons/io';
 
 export default function Community() {
 	return (
 		<Layout title={'Community'}>
-			<p>Community 전용 컨텐츠</p>
+			<div className='wrap'>
+				<div className='inputBox'>
+					<form>
+						<input type='text' placeholder='title' name='tit' />
+						<textarea name='con' cols='30' rows='10' placeholder='content'></textarea>
+						<nav>
+							<button>
+								<IoMdCreate />
+							</button>
+							<button>
+								<MdClose />
+							</button>
+						</nav>
+					</form>
+				</div>
+				<div className='showBox'></div>
+			</div>
 		</Layout>
 	);
 }
