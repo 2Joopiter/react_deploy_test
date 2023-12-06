@@ -1,5 +1,4 @@
 .Gallery {
-	--gap: 20px;
 	--num: 4;
 
 	.controls {
@@ -68,46 +67,52 @@
 		}
 	}
 
-	.frame {
-		width: 100%;
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--gap);
-		justify-content: flex-start;
+	.frameWrap {
+		/* gap이라는 변수값을 컴포넌트에 적용하기 위해서는 jsx 파일에서 해당 변수가 등록될 요소를 참조해야 함
+		useRef로 참조할 때, jsx 요소는 참조가능하지만 component는 참조 불가하므로 component로 출력되는 갤러리 말고(Layout) jsx로 출력되는 
+		.framwWrap(section 파트)에 --gap 변수 등록 */
+		--gap: 20px;
+		.frame {
+			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--gap);
+			justify-content: flex-start;
 
-		article {
-			width: calc((100% - var(--gap) * (var(--num) - 1)) / var(--num));
-			margin-bottom: 70px;
-			border-bottom: 1px solid rgba(var(--baseColor-code), 0.5);
+			article {
+				width: calc((100% - var(--gap) * (var(--num) - 1)) / var(--num));
+				margin-bottom: 70px;
+				border-bottom: 1px solid rgba(var(--baseColor-code), 0.5);
 
-			.pic {
-				width: 100%;
-				margin-bottom: 10px;
-
-				img {
+				.pic {
 					width: 100%;
-				}
-			}
-			h2 {
-				font-weight: normal;
-				font-size: 1rem;
-				line-height: 1.2;
-				margin-bottom: 10px;
-			}
-			.profile {
-				width: 100%;
-				display: flex;
-				align-items: flex-end;
-				gap: 10px;
-				margin-bottom: 20px;
+					margin-bottom: 10px;
 
-				img {
-					width: 40px;
+					img {
+						width: 100%;
+					}
 				}
-				span {
-					cursor: pointer;
-					color: var(--pointColor);
-					font-size: 0.8rem;
+				h2 {
+					font-weight: normal;
+					font-size: 1rem;
+					line-height: 1.2;
+					margin-bottom: 10px;
+				}
+				.profile {
+					width: 100%;
+					display: flex;
+					align-items: flex-end;
+					gap: 10px;
+					margin-bottom: 20px;
+
+					img {
+						width: 40px;
+					}
+					span {
+						cursor: pointer;
+						color: var(--pointColor);
+						font-size: 0.8rem;
+					}
 				}
 			}
 		}

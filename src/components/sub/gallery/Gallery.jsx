@@ -8,7 +8,9 @@ import Modal from '../../common/modal/Modal';
 export default function Gallery() {
 	const [Pics, setPics] = useState([]);
 	const myID = useRef('199646606@N06');
+	const refFrameWrap = useRef(null);
 	const refNav = useRef(null);
+	const gap = useRef(20);
 	const isUser = useRef(myID.current);
 	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
@@ -99,8 +101,8 @@ export default function Gallery() {
 					</form>
 				</article>
 
-				<section>
-					<Masonry className={'frame'} options={{ transitionDuration: '0.5s', gutter: 20 }}>
+				<section className='frameWrap' ref={refFrameWrap}>
+					<Masonry className={'frame'} options={{ transitionDuration: '0.5s', gutter: gap.current }}>
 						{Pics.length === 0 ? (
 							<h2>해당 키워드에 해당하는 검색 결과가 없습니다.</h2>
 						) : (
