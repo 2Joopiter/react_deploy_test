@@ -4,6 +4,7 @@ import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
 import { LuSearch } from 'react-icons/lu';
 import Modal from '../../common/modal/Modal';
+import { useCustomText } from '../../../hooks/useText';
 
 export default function Gallery() {
 	const [Pics, setPics] = useState([]);
@@ -14,6 +15,7 @@ export default function Gallery() {
 	const isUser = useRef(myID.current);
 	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
+	const shortenTxt = useCustomText('shorten');
 
 	const activateBtn = (e) => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -120,7 +122,7 @@ export default function Gallery() {
 										>
 											<img src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_m.jpg`} alt={pic.title} />
 										</div>
-										<h2>{pic.title}</h2>
+										<h2>{shortenTxt(pic.title)}</h2>
 
 										<div className='profile'>
 											<img

@@ -9,6 +9,8 @@ export default function Community() {
 	const refTit = useRef(null);
 	const refCon = useRef(null);
 
+	console.log(window);
+
 	const resetPost = () => {
 		refTit.current.value = '';
 		refCon.current.value = '';
@@ -27,7 +29,7 @@ export default function Community() {
 			<div className='wrap'>
 				<div className='inputBox'>
 					<input type='text' placeholder='title' ref={refTit} />
-					<textarea cols='30' rows='10' placeholder='content' ref={refCon}></textarea>
+					<textarea cols='30' rows='6' placeholder='content' ref={refCon}></textarea>
 					<nav>
 						<button onClick={createPost}>
 							<IoMdCreate />
@@ -71,5 +73,17 @@ export default function Community() {
 	R (Read/데이터 호출)   예> 글 목록보기
 	U (Update/데이터 변경) 예> 글 수정
 	D (Delete/데이터 삭제) 예> 글 삭제
+
+*/
+
+/*
+- LocalStorage: 모든 브라우저가 내장하고 있는 경량의 저장소
+    - 문자값만 저장 가능 (최대 5MB)
+    - 로컬 저장소에 문자열 이외의 값을 저장할 때에는 강제로 문자화시켜서 저장해야 함
+    - 로컬저장소의 값을 JS로 가져올 때에는 반대로 문자값을 객체화 시켜서 호출해야 함
+
+- LocalStorage 객체에 활용 가능한 메서드
+    - setItem(’키값’,’문자화로 저장된 데이터’); 해당 key 값에 데이터를 담아서 저장
+    - getItem(’키값’): 해당 key값에 매칭이 되는 데이터를 가져옴
 
 */
