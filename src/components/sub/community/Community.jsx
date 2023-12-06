@@ -2,26 +2,39 @@ import Layout from '../../common/layout/Layout';
 import './Community.scss';
 import { MdClose } from 'react-icons/md';
 import { IoMdCreate } from 'react-icons/io';
+import { useRef, useState } from 'react';
 
 export default function Community() {
+	const [Post, setPost] = useState([]);
+	const refTit = useRef(null);
+	const refCon = useRef(null);
+
+	const resetPost = () => {
+		refTit.current.value='';
+		refCon.current.value='';
+	}
+	const createPost = () => {
+		setPost([...Post, { title: refTit.current.value, content: refCon.current.value }]);
+	};
+
 	return (
 		<Layout title={'Community'}>
 			<div className='wrap'>
 				<div className='inputBox'>
-					<form>
-						<input type='text' placeholder='title' name='tit' />
-						<textarea name='con' cols='30' rows='10' placeholder='content'></textarea>
+						<input type='text' placeholder='title' ref={refTit} />
+						<textarea cols='30' rows='10' placeholder='content' ref={refCon}></textarea>
 						<nav>
-							<button>
+							<button onClick={resetPost}>
 								<IoMdCreate />
 							</button>
-							<button>
+							<button onClick={createPost}>
 								<MdClose />
 							</button>
 						</nav>
-					</form>
 				</div>
-				<div className='showBox'></div>
+				<div className='showBox'>
+
+				</div>
 			</div>
 		</Layout>
 	);
