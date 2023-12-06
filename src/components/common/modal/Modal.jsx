@@ -1,4 +1,5 @@
 import './Modal.scss';
+import { IoClose } from 'react-icons/io5';
 import { AnimatePresence, motion } from 'framer-motion';
 
 /*
@@ -33,7 +34,7 @@ export default function Modal({ Open, setOpen, children }) {
 							setOpen(false);
 						}}
 					>
-						close
+						<IoClose />
 					</span>
 				</motion.aside>
 			)}
