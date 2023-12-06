@@ -10,30 +10,43 @@ export default function Community() {
 	const refCon = useRef(null);
 
 	const resetPost = () => {
-		refTit.current.value='';
-		refCon.current.value='';
-	}
+		refTit.current.value = '';
+		refCon.current.value = '';
+	};
 	const createPost = () => {
-		setPost([...Post, { title: refTit.current.value, content: refCon.current.value }]);
+		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
 	};
 
 	return (
 		<Layout title={'Community'}>
 			<div className='wrap'>
 				<div className='inputBox'>
-						<input type='text' placeholder='title' ref={refTit} />
-						<textarea cols='30' rows='10' placeholder='content' ref={refCon}></textarea>
-						<nav>
-							<button onClick={resetPost}>
-								<IoMdCreate />
-							</button>
-							<button onClick={createPost}>
-								<MdClose />
-							</button>
-						</nav>
+					<input type='text' placeholder='title' ref={refTit} />
+					<textarea cols='30' rows='10' placeholder='content' ref={refCon}></textarea>
+					<nav>
+						<button onClick={createPost}>
+							<IoMdCreate />
+						</button>
+						<button onClick={resetPost}>
+							<MdClose />
+						</button>
+					</nav>
 				</div>
 				<div className='showBox'>
-
+					{Post.map((el, idx) => {
+						return (
+							<article key={el + idx}>
+								<div className='txt'>
+									<h2>{el.title}</h2>
+									<p>{el.content}</p>
+								</div>
+								<nav>
+									<button>Edit</button>
+									<button>Delete</button>
+								</nav>
+							</article>
+						);
+					})}
 				</div>
 			</div>
 		</Layout>
