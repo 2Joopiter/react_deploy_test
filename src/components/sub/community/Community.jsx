@@ -2,19 +2,25 @@ import Layout from '../../common/layout/Layout';
 import './Community.scss';
 import { MdClose } from 'react-icons/md';
 import { IoMdCreate } from 'react-icons/io';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Community() {
-	const [Post, setPost] = useState([]);
+	const getLocalData = () => {
+		const data = localStorage.getItem('post');
+		if (data) return JSON.parse(data);
+		else return [];
+	};
+	const [Post, setPost] = useState(getLocalData());
 	const refTit = useRef(null);
 	const refCon = useRef(null);
 
-	console.log(window);
-
+	// input 초기화 함수
 	const resetPost = () => {
 		refTit.current.value = '';
 		refCon.current.value = '';
 	};
+
+	// 글 저장 함수
 	const createPost = () => {
 		if (!refTit.current.value.trim() || !refCon.current.value.trim()) {
 			resetPost();
@@ -23,6 +29,17 @@ export default function Community() {
 		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
 		resetPost();
 	};
+
+	// 글 삭제 함수
+	const deletePost = (delIndex) => {
+		// filter: 기존의 map과 마찬가지로 기존 배열을 deep copy해서 새로운 배열로 반환
+		// 이 때, 안쪽에 조건문을 처리해서 특정 조건에 부합되는 값만 filtering해서 리턴
+		setPost(Post.filter((_, idx) => delIndex !== idx));
+	};
+
+	useEffect(() => {
+		localStorage.setItem('post', JSON.stringify(Post));
+	}, [Post]);
 
 	return (
 		<Layout title={'Community'}>
@@ -49,7 +66,13 @@ export default function Community() {
 								</div>
 								<nav>
 									<button>Edit</button>
-									<button>Delete</button>
+									<button
+										onClick={() => {
+											deletePost(idx);
+										}}
+									>
+										Delete
+									</button>
 								</nav>
 							</article>
 						);
