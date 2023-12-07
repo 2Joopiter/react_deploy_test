@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useCustomText } from '../../../hooks/useText';
 
 export default function Community() {
-	// 추후 가져올 시간값에서 -을 .으로 변경하기 위해 combined 타입의 텍스트 변환 함수를 텍스트 관련 훅으로부터 활성화
 	const changeText = useCustomText('combined');
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
@@ -17,31 +16,24 @@ export default function Community() {
 	const refTit = useRef(null);
 	const refCon = useRef(null);
 
-	// input 초기화 함수
 	const resetPost = () => {
 		refTit.current.value = '';
 		refCon.current.value = '';
 	};
 
-	// 글 저장 함수
 	const createPost = () => {
 		if (!refTit.current.value.trim() || !refCon.current.value.trim()) {
 			resetPost();
 			return alert('제목과 본문을 모두 입력하세요');
 		}
 
-		// 기존의 시간 인스턴스값을 한국시에 맞게 변경 (기본값: 표준시)
-		// new Date().toLocalString(): 해당 지역의 표준시로 변환 (단점, 원하지 않는 방향으로 가공됨(한글이 나옴))
 		const korTime = new Date().getTime() + 1000 * 60 * 60 * 9;
-		// 한국시로 변환된 객체값을 date 키값에 추가로 등록해 State에 변환
 		setPost([{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime) }, ...Post]);
 		resetPost();
 	};
 
-	// 글 삭제 함수
 	const deletePost = (delIndex) => {
-		// filter: 기존의 map과 마찬가지로 기존 배열을 deep copy해서 새로운 배열로 반환
-		// 이 때, 안쪽에 조건문을 처리해서 특정 조건에 부합되는 값만 filtering해서 리턴
+		if (!window.confirm('정말 해당 게시글을 삭제하겠습니까?')) return; //confirm-alert에 확인기능까지 추가된 팝업창
 		setPost(Post.filter((_, idx) => delIndex !== idx));
 	};
 
@@ -70,12 +62,7 @@ export default function Community() {
 				</div>
 				<div className='showBox'>
 					{Post.map((el, idx) => {
-						// 시간값을 getLocalDate 함수를 통해서 시간 인스턴스 객체값을 객체상태 그대로 JSX 안쪽의 {}에 넣을 수 없으므로
-						// 변환된 시간 객체값을 다시 강제로 문자화
 						const date = JSON.stringify(el.date);
-						// 문자화 시킨 값에서 먼저 T를 기점으로 앞뒤로 나눠주고(앞: 날짜), 맨앞의 ''를 제외한 나머지 문자 반환(년도-월-일 > 년도.월.일)
-						// 아래 sapn 태그에서 변환된 시간값을 출력
-
 						const strDate = changeText(date?.split('T')[0].slice(1), '.');
 						const strTime = changeText(date?.split('T')[1].slice(0, 5), '.');
 						return (
