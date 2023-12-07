@@ -39,10 +39,21 @@ export default function Community() {
 
 	//수정모드 변경 함수
 	const enableUpdate = (editIndex) => {
-		Post.map((el, idx) => {
-			if (editIndex === idx) el.enableUpdate = true;
-			return el;
-		});
+		setPost(
+			Post.map((el, idx) => {
+				if (editIndex === idx) el.enableUpdate = true;
+				return el;
+			})
+		);
+	};
+
+	const disableUpdate = (editIndex) => {
+		setPost(
+			Post.map((el, idx) => {
+				if (editIndex === idx) el.enableUpdate = false;
+				return el;
+			})
+		);
 	};
 
 	const filterText = (txt) => {
@@ -73,27 +84,48 @@ export default function Community() {
 						const date = JSON.stringify(el.date);
 						const strDate = changeText(date?.split('T')[0].slice(1), '.');
 						const strTime = changeText(date?.split('T')[1].slice(0, 5), '.');
-						return (
-							<article key={el + idx}>
-								<div className='txt'>
-									<h2>{el.title}</h2>
-									<p>{el.content}</p>
-									<span>
-										{strDate}/{strTime}
-									</span>
-								</div>
-								<nav>
-									<button onClick={() => enableUpdate(idx)}>Edit</button>
-									<button
-										onClick={() => {
-											deletePost(idx);
-										}}
-									>
-										Delete
-									</button>
-								</nav>
-							</article>
-						);
+
+						if (el.enableUpdate) {
+							// 수정모드
+							return (
+								<article key={el + idx}>
+									<div className='txt'>
+										<input type='text' defaultValue={el.title} />
+										<textarea cols='30' rows='3' defaultValue={el.content}></textarea>
+										<span>
+											{strDate}/{strTime}
+										</span>
+									</div>
+									<nav>
+										<button>Write</button>
+										<button onClick={() => disableUpdate(idx)}>Cancel</button>
+									</nav>
+								</article>
+							);
+						} else {
+							// 출력모드
+							return (
+								<article key={el + idx}>
+									<div className='txt'>
+										<h2>{el.title}</h2>
+										<p>{el.content}</p>
+										<span>
+											{strDate}/{strTime}
+										</span>
+									</div>
+									<nav>
+										<button onClick={() => enableUpdate(idx)}>Edit</button>
+										<button
+											onClick={() => {
+												deletePost(idx);
+											}}
+										>
+											Delete
+										</button>
+									</nav>
+								</article>
+							);
+						}
 					})}
 				</div>
 			</div>
