@@ -3,8 +3,11 @@ import './Community.scss';
 import { MdClose } from 'react-icons/md';
 import { IoMdCreate } from 'react-icons/io';
 import { useEffect, useRef, useState } from 'react';
+import { useCustomText } from '../../../hooks/useText';
 
 export default function Community() {
+	// 추후 가져올 시간값에서 -을 .으로 변경하기 위해 combined 타입의 텍스트 변환 함수를 텍스트 관련 훅으로부터 활성화
+	const changeText = useCustomText('combined');
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		if (data) return JSON.parse(data);
@@ -26,7 +29,12 @@ export default function Community() {
 			resetPost();
 			return alert('제목과 본문을 모두 입력하세요');
 		}
-		setPost([{ title: refTit.current.value, content: refCon.current.value }, ...Post]);
+
+		// 기존의 시간 인스턴스값을 한국시에 맞게 변경 (기본값: 표준시)
+		// new Date().toLocalString(): 해당 지역의 표준시로 변환 (단점, 원하지 않는 방향으로 가공됨(한글이 나옴))
+		const korTime = new Date().getTime() + 1000 * 60 * 60 * 9;
+		// 한국시로 변환된 객체값을 date 키값에 추가로 등록해 State에 변환
+		setPost([{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime) }, ...Post]);
 		resetPost();
 	};
 
@@ -62,11 +70,18 @@ export default function Community() {
 				</div>
 				<div className='showBox'>
 					{Post.map((el, idx) => {
+						// 시간값을 getLocalDate 함수를 통해서 시간 인스턴스 객체값을 객체상태 그대로 JSX 안쪽의 {}에 넣을 수 없으므로
+						// 변환된 시간 객체값을 다시 강제로 문자화
+						const date = JSON.stringify(el.date);
+						// 문자화 시킨 값에서 먼저 T를 기점으로 앞뒤로 나눠주고(앞: 시간), 맨앞의 ''를 제외한 나머지 문자 반환(년도-월-일 > 년도.월.일)
+						// 아래 sapn 태그에서 변환된 시간값을 출력
+						const strDate = changeText(date?.split('T')[0].slice(1), '.');
 						return (
 							<article key={el + idx}>
 								<div className='txt'>
 									<h2>{el.title}</h2>
 									<p>{el.content}</p>
+									<span>{strDate}</span>
 								</div>
 								<nav>
 									<button onClick={() => filterText('')}>Edit</button>
