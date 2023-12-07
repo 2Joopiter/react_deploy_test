@@ -73,15 +73,19 @@ export default function Community() {
 						// 시간값을 getLocalDate 함수를 통해서 시간 인스턴스 객체값을 객체상태 그대로 JSX 안쪽의 {}에 넣을 수 없으므로
 						// 변환된 시간 객체값을 다시 강제로 문자화
 						const date = JSON.stringify(el.date);
-						// 문자화 시킨 값에서 먼저 T를 기점으로 앞뒤로 나눠주고(앞: 시간), 맨앞의 ''를 제외한 나머지 문자 반환(년도-월-일 > 년도.월.일)
+						// 문자화 시킨 값에서 먼저 T를 기점으로 앞뒤로 나눠주고(앞: 날짜), 맨앞의 ''를 제외한 나머지 문자 반환(년도-월-일 > 년도.월.일)
 						// 아래 sapn 태그에서 변환된 시간값을 출력
+
 						const strDate = changeText(date?.split('T')[0].slice(1), '.');
+						const strTime = changeText(date?.split('T')[1].slice(0, 5), '.');
 						return (
 							<article key={el + idx}>
 								<div className='txt'>
 									<h2>{el.title}</h2>
 									<p>{el.content}</p>
-									<span>{strDate}</span>
+									<span>
+										{strDate}/{strTime}
+									</span>
 								</div>
 								<nav>
 									<button onClick={() => filterText('')}>Edit</button>
