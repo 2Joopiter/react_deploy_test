@@ -15,6 +15,9 @@ export default function Community() {
 	const [Post, setPost] = useState(getLocalData());
 	const refTit = useRef(null);
 	const refCon = useRef(null);
+	const refEditTit = useRef(null);
+	const refEditCon = useRef(null);
+	const editMode = useRef(false);
 
 	const resetPost = () => {
 		refTit.current.value = '';
@@ -32,6 +35,24 @@ export default function Community() {
 		resetPost();
 	};
 
+	// 글 수정 함수
+	const updatePost = (updateIndex) => {
+		if (!refEditTit.current.value.trim() || !refEditCon.current.value.trim()) {
+			return alert('수정할 글의 제목과 본문을 모두 입력하세요');
+		}
+		editMode.current = false;
+		setPost(
+			Post.map((el, idx) => {
+				if (updateIndex === idx) {
+					el.title = refEditTit.current.value;
+					el.content = refEditCon.current.value;
+					el.enableUpdate = false;
+				}
+				return el;
+			})
+		);
+	};
+
 	const deletePost = (delIndex) => {
 		if (!window.confirm('정말 해당 게시글을 삭제하겠습니까?')) return; //confirm-alert에 확인기능까지 추가된 팝업창
 		setPost(Post.filter((_, idx) => delIndex !== idx));
@@ -39,6 +60,8 @@ export default function Community() {
 
 	//수정모드 변경 함수
 	const enableUpdate = (editIndex) => {
+		if (editMode.current) return;
+		editMode.current = true;
 		setPost(
 			Post.map((el, idx) => {
 				if (editIndex === idx) el.enableUpdate = true;
@@ -48,6 +71,7 @@ export default function Community() {
 	};
 
 	const disableUpdate = (editIndex) => {
+		editMode.current = false;
 		setPost(
 			Post.map((el, idx) => {
 				if (editIndex === idx) el.enableUpdate = false;
@@ -90,14 +114,14 @@ export default function Community() {
 							return (
 								<article key={el + idx}>
 									<div className='txt'>
-										<input type='text' defaultValue={el.title} />
-										<textarea cols='30' rows='3' defaultValue={el.content}></textarea>
+										<input type='text' defaultValue={el.title} ref={refEditTit} />
+										<textarea cols='30' rows='4' defaultValue={el.content} ref={refEditCon}></textarea>
 										<span>
 											{strDate}/{strTime}
 										</span>
 									</div>
 									<nav>
-										<button>Write</button>
+										<button onClick={() => updatePost(idx)}>Modify</button>
 										<button onClick={() => disableUpdate(idx)}>Cancel</button>
 									</nav>
 								</article>

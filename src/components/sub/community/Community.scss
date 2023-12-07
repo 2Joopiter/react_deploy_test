@@ -58,7 +58,7 @@
 
 			article {
 				width: calc((100% - var(--gap) * (var(--num) - 1)) / var(--num));
-				height: 25vh;
+				height: 30vh;
 				background-color: rgba(var(--baseColor-code), 0.1);
 				padding: 20px;
 				margin-bottom: 10px;
@@ -81,7 +81,17 @@
 					p {
 						font: 1rem/1.4 'arial';
 						opacity: 0.6;
-						margin-bottom: 30px;
+						margin-bottom: 50px;
+					}
+
+					input,
+					textarea {
+						border: none;
+						width: 100%;
+						font-size: 1rem;
+						padding: 3px 10px;
+						margin-bottom: 20px;
+						resize: none;
 					}
 				}
 
