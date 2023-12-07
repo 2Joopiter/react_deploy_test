@@ -68,10 +68,6 @@
 	}
 
 	.frameWrap {
-		/* gap이라는 변수값을 컴포넌트에 적용하기 위해서는 jsx 파일에서 해당 변수가 등록될 요소를 참조해야 함
-		useRef로 참조할 때, jsx 요소는 참조가능하지만 component는 참조 불가하므로 component로 출력되는 갤러리 말고(Layout) jsx로 출력되는 
-		.framwWrap(section 파트)에 --gap 변수 등록 */
-		// --gap: 20px; 해당 값은 리액트에서 처음 useEffect가 실행될 때 동적으로 생성되는 변수값
 		.frame {
 			width: 100%;
 			display: flex;
@@ -112,6 +108,7 @@
 						cursor: pointer;
 						color: var(--pointColor);
 						font-size: 0.8rem;
+						word-break: break-all;
 					}
 				}
 			}
