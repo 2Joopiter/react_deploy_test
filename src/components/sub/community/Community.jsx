@@ -37,6 +37,14 @@ export default function Community() {
 		setPost(Post.filter((_, idx) => delIndex !== idx));
 	};
 
+	//수정모드 변경 함수
+	const enableUpdate = (editIndex) => {
+		Post.map((el, idx) => {
+			if (editIndex === idx) el.enableUpdate = true;
+			return el;
+		});
+	};
+
 	const filterText = (txt) => {
 		Post.filter((el) => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
 	};
@@ -75,7 +83,7 @@ export default function Community() {
 									</span>
 								</div>
 								<nav>
-									<button onClick={() => filterText('')}>Edit</button>
+									<button onClick={() => enableUpdate(idx)}>Edit</button>
 									<button
 										onClick={() => {
 											deletePost(idx);
@@ -118,5 +126,13 @@ export default function Community() {
 - LocalStorage 객체에 활용 가능한 메서드
     - setItem(’키값’,’문자화로 저장된 데이터’); 해당 key 값에 데이터를 담아서 저장
     - getItem(’키값’): 해당 key값에 매칭이 되는 데이터를 가져옴
+*/
 
+/*
+	글 수정 로직 단계
+	1. 각 포스트에서 수정 버튼 클릭시 해당 객체에 enableUpdate=true라는 property를 동적으로 추가후 state에 저장
+	2. 다음번 렌더링 사이클에서 포스트를 반복돌며 객체에 enableUpdate 값이 true이면 제목 본문을 input요소에 담아서 출력하도록 분기처리 (수정모드로 분기처리해서 출력되도록)
+	3. 수정모드일때는 버튼도 수정 취소, 수정 완료로 변경(생성)
+	4. 수정모드에서 수정 취소버튼 클릭시 해당 포스트 객체에 enableUpdate=false로 변경해서 다시 출력모드를 변경
+	5. 수정모드에서 수정 완료 클릭시 해당 폼 요소에 수정된 value값을 가져와서 저장한 뒤 다시 출력모드 변경
 */
