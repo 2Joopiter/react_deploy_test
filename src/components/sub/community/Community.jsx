@@ -37,6 +37,10 @@ export default function Community() {
 		setPost(Post.filter((_, idx) => delIndex !== idx));
 	};
 
+	const filterText = (txt) => {
+		Post.filter((el) => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
+	};
+
 	useEffect(() => {
 		localStorage.setItem('post', JSON.stringify(Post));
 	}, [Post]);
@@ -65,7 +69,7 @@ export default function Community() {
 									<p>{el.content}</p>
 								</div>
 								<nav>
-									<button>Edit</button>
+									<button onClick={() => filterText('')}>Edit</button>
 									<button
 										onClick={() => {
 											deletePost(idx);
