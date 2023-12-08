@@ -1,29 +1,32 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Contact.scss';
 
 export default function Contact() {
+	const [Index, setIndex] = useState(0);
+
 	const { kakao } = window;
 	const mapFrame = useRef(null);
+	const mapInfo = useRef([
+		{
+			title: '코엑스',
+			latlng: new kakao.maps.LatLng(37.52506188634506, 126.9259552665427),
+			imgsrc: process.env.PUBLIC_URL + '/img/marker1.png',
+			imgSize: new kakao.maps.Size(232, 99),
+			imgOpt: { offset: new kakao.maps.Point(112, 99) },
+		},
+	]);
 
-	const mapOption = useRef({
-		center: new kakao.maps.LatLng(37.52506188634506, 126.9259552665427),
-		level: 3,
+	// 마커 인스턴스 생성
+	const markerInstance = new kakao.maps.Marker({
+		position: mapInfo.current[0].latlng,
+		image: new kakao.maps.MarkerImage(mapInfo.current[Index].imgsrc, mapInfo.current[Index].imgSize, mapInfo.current[Index].imgOpt),
 	});
-
-	const imgSrc = process.env.PUBLIC_URL + '/img/marker1.png';
-	const imgSize = new kakao.maps.Size(232, 99);
-	const imgOpt = { offset: new kakao.maps.Point(112, 99) }; // 이미지값의 가로 절반, 세로만큼
-
 	useEffect(() => {
-		const mapInstance = new kakao.maps.Map(mapFrame.current, mapOption.current);
-		const markerImageInstance = new kakao.maps.MarkerImage(imgSrc, imgSize, imgOpt);
-
-		const markerInstance = new kakao.maps.Marker({
-			position: mapOption.current.center,
-			image: markerImageInstance,
+		const mapInstance = new kakao.maps.Map(mapFrame.current, {
+			center: mapInfo.current[Index].latlng,
+			level: 3,
 		});
-
 		markerInstance.setMap(mapInstance);
 	}, []);
 
