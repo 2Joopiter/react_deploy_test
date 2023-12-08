@@ -7,7 +7,7 @@ export default function Contact() {
 	const mapFrame = useRef(null);
 
 	const mapOption = useRef({
-		center: new kakao.maps.LatLng(33.450701, 126.570667),
+		center: new kakao.maps.LatLng(37.52506188634506, 126.9259552665427),
 		level: 3,
 	});
 
