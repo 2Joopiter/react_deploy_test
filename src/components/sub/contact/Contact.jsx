@@ -4,6 +4,8 @@ import './Contact.scss';
 
 export default function Contact() {
 	const [Index, setIndex] = useState(0);
+	const [Traffic, setTraffic] = useState(false);
+
 	const kakao = useRef(window.kakao);
 	const marker = useRef(null);
 	const mapInstance = useRef(null);
@@ -42,24 +44,44 @@ export default function Contact() {
 	const setCenter = () => mapInstance.current.setCenter(mapInfo.current[Index].latlng);
 
 	useEffect(() => {
+		mapFrame.current.innerHTML = '';
 		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
 			level: 3,
 		});
 		marker.current.setMap(mapInstance.current);
+		setTraffic(false);
+
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
 	}, [Index]);
 
+	useEffect(() => {
+		Traffic
+			? mapInstance.current.addOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC)
+			: mapInstance.current.removeOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC);
+	}, [Traffic]);
+
 	return (
 		<Layout title={'Contact'}>
-			<ul className='branch'>
-				{mapInfo.current.map((el, idx) => (
-					<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
-						{el.title}
+			<div className='controlBox'>
+				<nav className='branch'>
+					{mapInfo.current.map((el, idx) => (
+						<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
+							{el.title}
+						</button>
+					))}
+				</nav>
+				<nav className='info'>
+					<button
+						onClick={() => {
+							setTraffic(!Traffic);
+						}}
+					>
+						{Traffic ? 'Traffic OFF' : 'Traffic ON'}
 					</button>
-				))}
-			</ul>
+				</nav>
+			</div>
 			<article id='map' ref={mapFrame}></article>
 		</Layout>
 	);
