@@ -54,6 +54,7 @@ export default function Contact() {
 
 		mapInstance.current.addControl(new kakao.current.maps.MapTypeControl(), kakao.current.maps.ControlPosition.TOPRIGHT);
 		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
+		mapInstance.current.setZoomable(false); // 마우스 휠로 맵 줌/아웃 기능 비활성화(true로 바꾸면 다시 활성화)
 
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
