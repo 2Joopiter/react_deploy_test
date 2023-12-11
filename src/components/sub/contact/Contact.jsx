@@ -5,6 +5,7 @@ import './Contact.scss';
 export default function Contact() {
 	const [Index, setIndex] = useState(0);
 	const [Traffic, setTraffic] = useState(false);
+	const [View, setView] = useState(false);
 
 	const kakao = useRef(window.kakao);
 	const marker = useRef(null);
@@ -21,9 +22,9 @@ export default function Contact() {
 			imgPos: { offset: new kakao.current.maps.Point(116, 99) },
 		},
 		{
-			title: '넥슨 본사',
-			latlng: new kakao.current.maps.LatLng(37.40211707077346, 127.10344953763003),
-			imgSrc: `${process.env.PUBLIC_URL}/img/marker2.png`,
+			title: '삼성역 코엑스',
+			latlng: new kakao.current.maps.LatLng(37.51100661425726, 127.06162026853143),
+			imgSrc: `${process.env.PUBLIC_URL}/img/marker1.png`,
 			imgSize: new kakao.current.maps.Size(232, 99),
 			imgPos: { offset: new kakao.current.maps.Point(116, 99) },
 		},
@@ -42,7 +43,16 @@ export default function Contact() {
 		image: new kakao.current.maps.MarkerImage(mapInfo.current[Index].imgSrc, mapInfo.current[Index].imgSize, mapInfo.current[Index].imgOpt),
 	});
 
-	const setCenter = () => mapInstance.current.setCenter(mapInfo.current[Index].latlng);
+	const roadView = () => {
+		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 100, (panoId) => {
+			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
+		});
+	};
+
+	const setCenter = () => {
+		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
+		roadView();
+	};
 
 	useEffect(() => {
 		mapFrame.current.innerHTML = '';
@@ -52,10 +62,9 @@ export default function Contact() {
 		});
 		marker.current.setMap(mapInstance.current);
 		setTraffic(false);
+		setView(false);
 
-		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 100, (panoId) => {
-			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
-		});
+		roadView();
 
 		mapInstance.current.addControl(new kakao.current.maps.MapTypeControl(), kakao.current.maps.ControlPosition.TOPRIGHT);
 		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
@@ -89,10 +98,14 @@ export default function Contact() {
 					>
 						{Traffic ? 'Traffic OFF' : 'Traffic ON'}
 					</button>
+					<button onClick={() => setView(!View)}>{View ? 'map' : 'road view'}</button>
+					<button onClick={setCenter}>위치 초기화</button>
 				</nav>
 			</div>
-			<article className='mapBox' ref={mapFrame}></article>
-			<article className='viewBox' ref={viewFrame}></article>
+			<section className='tab'>
+				<article className={`mapBox ${View ? '' : 'on'}`} ref={mapFrame}></article>
+				<article className={`viewBox ${View ? 'on' : ''}`} ref={viewFrame}></article>
+			</section>
 		</Layout>
 	);
 }
