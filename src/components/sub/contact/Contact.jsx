@@ -6,6 +6,7 @@ export default function Contact() {
 	const [Index, setIndex] = useState(0);
 	const kakao = useRef(window.kakao);
 	const marker = useRef(null);
+	const mapInstance = useRef(null);
 
 	const mapFrame = useRef(null);
 	const mapInfo = useRef([
@@ -37,12 +38,17 @@ export default function Contact() {
 		position: mapInfo.current[Index].latlng,
 		image: new kakao.current.maps.MarkerImage(mapInfo.current[Index].imgSrc, mapInfo.current[Index].imgSize, mapInfo.current[Index].imgOpt),
 	});
+
+	const setCenter = () => mapInstance.current.setCenter(mapInfo.current[Index].latlng);
+
 	useEffect(() => {
-		const mapInstance = new kakao.current.maps.Map(mapFrame.current, {
+		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
 			level: 3,
 		});
-		marker.current.setMap(mapInstance);
+		marker.current.setMap(mapInstance.current);
+		window.addEventListener('resize', setCenter);
+		return () => window.removeEventListener('resize', setCenter);
 	}, [Index]);
 
 	return (
