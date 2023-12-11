@@ -52,6 +52,9 @@ export default function Contact() {
 		marker.current.setMap(mapInstance.current);
 		setTraffic(false);
 
+		mapInstance.current.addControl(new kakao.current.maps.MapTypeControl(), kakao.current.maps.ControlPosition.TOPRIGHT);
+		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
+
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
 	}, [Index]);
@@ -86,3 +89,9 @@ export default function Contact() {
 		</Layout>
 	);
 }
+
+/* 
+	1. cdn 불러온 window에 불러온 외부객체값을 가져와서 인스턴스 생성
+	2. 인스턴스값을 참조객체에 담는 이유 (의존성 배열에 불필요하게 등록하지 않기 위해서)
+	3. 화면 변경점이 발생해야 될 때 무조건 State 값에 따라서 변경되게 로직화 한 다음에 이벤트 발생시 State를 변경해서 화면 재랜더링 유도
+*/
