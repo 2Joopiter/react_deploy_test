@@ -9,12 +9,13 @@ export default function Contact() {
 	const kakao = useRef(window.kakao);
 	const marker = useRef(null);
 	const mapInstance = useRef(null);
+	const viewFrame = useRef(null);
 
 	const mapFrame = useRef(null);
 	const mapInfo = useRef([
 		{
-			title: '삼성역 코엑스',
-			latlng: new kakao.current.maps.LatLng(37.51100661425726, 127.06162026853143),
+			title: '여의도 IFC몰',
+			latlng: new kakao.current.maps.LatLng(37.52506188634506, 126.9259552665427),
 			imgSrc: `${process.env.PUBLIC_URL}/img/marker1.png`,
 			imgSize: new kakao.current.maps.Size(232, 99),
 			imgPos: { offset: new kakao.current.maps.Point(116, 99) },
@@ -52,6 +53,10 @@ export default function Contact() {
 		marker.current.setMap(mapInstance.current);
 		setTraffic(false);
 
+		new kakao.current.maps.RoadviewClient().getNearestPanoId(mapInfo.current[Index].latlng, 100, (panoId) => {
+			new kakao.current.maps.Roadview(viewFrame.current).setPanoId(panoId, mapInfo.current[Index].latlng);
+		});
+
 		mapInstance.current.addControl(new kakao.current.maps.MapTypeControl(), kakao.current.maps.ControlPosition.TOPRIGHT);
 		mapInstance.current.addControl(new kakao.current.maps.ZoomControl(), kakao.current.maps.ControlPosition.RIGHT);
 		mapInstance.current.setZoomable(false); // 마우스 휠로 맵 줌/아웃 기능 비활성화(true로 바꾸면 다시 활성화)
@@ -86,7 +91,8 @@ export default function Contact() {
 					</button>
 				</nav>
 			</div>
-			<article id='map' ref={mapFrame}></article>
+			<article className='mapBox' ref={mapFrame}></article>
+			<article className='viewBox' ref={viewFrame}></article>
 		</Layout>
 	);
 }
