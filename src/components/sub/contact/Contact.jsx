@@ -42,7 +42,10 @@ export default function Contact() {
 
 	const resetForm = () => {
 		const elArr = form.current.children;
-		Array.form(elArr).forEach(el => {
+		// 그룹형식의 DOM을 탐색할 때 반환되는 두가지 형태의 유사배열
+		// parentDOM.children : HTMLcollection (유사배열: forEach, map 모두 반복 불가, Live DOM: 상태변경이 실시간)
+		// parentDOM.querySelectorAll : nodeList (유사배열: forEach로는 반복 가능. Static DOM:탐색된 시점에 픽스된 정적DOM)
+		Array.from(elArr).forEach(el => {
 			if (el.name === 'user_name' || el.name === 'user_email' || el.name === 'message')
 				el.value = '';
 		});
