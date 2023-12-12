@@ -15,11 +15,19 @@
 				border: none;
 				border-bottom: 1px solid rgba(var(--baseColor-code), 0.3);
 				padding: 5px 10px;
+				font-family: var(--baseFont);
 				font-size: 0.8rem;
 				background-color: transparent;
 				color: var(--baseColor);
 				margin-bottom: 1px;
 				resize: none;
+
+				&::placeholder {
+					font-size: 1rem;
+					font-weight: normal;
+					font-family: var(--baseFont);
+					color: var(--baseColor);
+				}
 			}
 
 			textarea {
