@@ -1,7 +1,26 @@
 import Layout from '../../common/layout/Layout';
 import './Members.scss';
+import { useRef, useState } from 'react';
 
 export default function Members() {
+	const initVal = useRef({
+		userid: '',
+		email: '',
+		comments: '',
+		pwd1: '',
+		pwd2: '',
+		edu: '',
+		gender: ''
+	});
+	const [Val, setVal] = useState(initVal.current);
+
+	const handleChange = e => {
+		//const key = e.target.name; // userid
+		//const value = e.target.value; // 현재 입력하고 있는 인풋값
+		const { name, value } = e.target;
+		setVal({ ...Val, [name]: value });
+	};
+
 	return (
 		<Layout title={'Members'}>
 			<div className='wrap'>
@@ -17,27 +36,51 @@ export default function Members() {
 									{/* userid, email */}
 									<tr>
 										<td>
-											<input type='text' name='userid' placeholder='User ID' />
+											<input
+												type='text'
+												name='userid'
+												value={Val.userid}
+												placeholder='User ID'
+												onChange={handleChange}
+											/>
 										</td>
 										<td>
-											<input type='text' name='email' placeholder='Email' />
+											<input
+												type='text'
+												name='email'
+												value={Val.email}
+												onChange={handleChange}
+												placeholder='Email'
+											/>
 										</td>
 									</tr>
 
 									{/* pwd1, pwd2 */}
 									<tr>
 										<td>
-											<input type='password' name='pwd1' placeholder='Password' />
+											<input
+												type='password'
+												name='pwd1'
+												placeholder='Password'
+												value={Val.pwd1}
+												onChange={handleChange}
+											/>
 										</td>
 										<td>
-											<input type='password' name='pwd2' placeholder='Re-Password' />
+											<input
+												type='password'
+												name='pwd2'
+												placeholder='Re-Password'
+												value={Val.pwd2}
+												onChange={handleChange}
+											/>
 										</td>
 									</tr>
 
 									{/* edu */}
 									<tr>
 										<td colSpan='2'>
-											<select name='edu'>
+											<select name='edu' onChange={handleChange}>
 												<option value=''>Education</option>
 												<option value='elementary-school'>초등학교 졸업</option>
 												<option value='middle-school'>중학교 졸업</option>
@@ -50,10 +93,22 @@ export default function Members() {
 									{/* gender */}
 									<tr>
 										<td colSpan='2'>
-											<input type='radio' defaultValue='female' id='female' name='gender' />
+											<input
+												type='radio'
+												defaultValue='female'
+												id='female'
+												name='gender'
+												onChange={handleChange}
+											/>
 											<label htmlFor='female'>Female</label>
 
-											<input type='radio' defaultValue='male' id='male' name='gender' />
+											<input
+												type='radio'
+												defaultValue='male'
+												id='male'
+												name='gender'
+												onChange={handleChange}
+											/>
 											<label htmlFor='male'>Male</label>
 										</td>
 									</tr>
@@ -82,7 +137,9 @@ export default function Members() {
 												name='comments'
 												cols='30'
 												rows='5'
-												placeholder='Leave a comment'></textarea>
+												placeholder='Leave a comment'
+												value={Val.comments}
+												onChange={handleChange}></textarea>
 										</td>
 									</tr>
 									<tr>
