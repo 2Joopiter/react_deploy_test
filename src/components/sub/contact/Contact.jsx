@@ -53,6 +53,12 @@ export default function Contact() {
 
 	const sendEmail = e => {
 		e.preventDefault();
+
+		const [user, email] = form.current.querySelectorAll('input');
+		const textArea = form.current.querySelector('textarea');
+		if (!user.value || !email.value || !textArea.value)
+			return alert('이름, 이메일 주소, 문의내용을 모두 입력하세요');
+
 		emailjs.sendForm('service_zzree4j', 'template_w86wuw7', form.current, '5euWzAafCXgbAmv3z').then(
 			result => {
 				alert('문의 내용이 성공적으로 전송되었습니다.');

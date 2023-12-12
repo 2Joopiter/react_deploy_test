@@ -4,13 +4,14 @@ import { MdClose } from 'react-icons/md';
 import { IoMdCreate } from 'react-icons/io';
 import { useEffect, useRef, useState } from 'react';
 import { useCustomText } from '../../../hooks/useText';
+import postData from './dummyPost.json';
 
 export default function Community() {
 	const changeText = useCustomText('combined');
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		if (data) return JSON.parse(data);
-		else return [];
+		else return postData.dummyPosts;
 	};
 	const [Post, setPost] = useState(getLocalData());
 	const refTit = useRef(null);
@@ -31,12 +32,15 @@ export default function Community() {
 		}
 
 		const korTime = new Date().getTime() + 1000 * 60 * 60 * 9;
-		setPost([{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime) }, ...Post]);
+		setPost([
+			{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime) },
+			...Post
+		]);
 		resetPost();
 	};
 
 	// 글 수정 함수
-	const updatePost = (updateIndex) => {
+	const updatePost = updateIndex => {
 		if (!refEditTit.current.value.trim() || !refEditCon.current.value.trim()) {
 			return alert('수정할 글의 제목과 본문을 모두 입력하세요');
 		}
@@ -53,13 +57,13 @@ export default function Community() {
 		);
 	};
 
-	const deletePost = (delIndex) => {
+	const deletePost = delIndex => {
 		if (!window.confirm('정말 해당 게시글을 삭제하겠습니까?')) return; //confirm-alert에 확인기능까지 추가된 팝업창
 		setPost(Post.filter((_, idx) => delIndex !== idx));
 	};
 
 	//수정모드 변경 함수
-	const enableUpdate = (editIndex) => {
+	const enableUpdate = editIndex => {
 		if (editMode.current) return;
 		editMode.current = true;
 		setPost(
@@ -70,7 +74,7 @@ export default function Community() {
 		);
 	};
 
-	const disableUpdate = (editIndex) => {
+	const disableUpdate = editIndex => {
 		editMode.current = false;
 		setPost(
 			Post.map((el, idx) => {
@@ -80,13 +84,13 @@ export default function Community() {
 		);
 	};
 
-	const filterText = (txt) => {
-		Post.filter((el) => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
+	const filterText = txt => {
+		Post.filter(el => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
 	};
 
 	useEffect(() => {
 		// Post 데이터가 변경되면 수정모드를 강제로 false처리하면서 로컬저장소에 저장하고 컴포넌트 재실행
-		Post.map((el) => {
+		Post.map(el => {
 			el.enableUpdate = false;
 		});
 		localStorage.setItem('post', JSON.stringify(Post));
@@ -119,7 +123,11 @@ export default function Community() {
 								<article key={el + idx}>
 									<div className='txt'>
 										<input type='text' defaultValue={el.title} ref={refEditTit} />
-										<textarea cols='30' rows='4' defaultValue={el.content} ref={refEditCon}></textarea>
+										<textarea
+											cols='30'
+											rows='4'
+											defaultValue={el.content}
+											ref={refEditCon}></textarea>
 										<span>
 											{strDate}/{strTime}
 										</span>
@@ -146,8 +154,7 @@ export default function Community() {
 										<button
 											onClick={() => {
 												deletePost(idx);
-											}}
-										>
+											}}>
 											Delete
 										</button>
 									</nav>
