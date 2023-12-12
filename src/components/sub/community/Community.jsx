@@ -4,14 +4,12 @@ import { MdClose } from 'react-icons/md';
 import { IoMdCreate } from 'react-icons/io';
 import { useEffect, useRef, useState } from 'react';
 import { useCustomText } from '../../../hooks/useText';
-import postData from './dummyPost.json';
 
 export default function Community() {
 	const changeText = useCustomText('combined');
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		if (data) return JSON.parse(data);
-		else return postData.dummyPosts;
 	};
 	const [Post, setPost] = useState(getLocalData());
 	const refTit = useRef(null);
