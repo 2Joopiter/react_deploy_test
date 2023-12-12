@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
+import emailjs from '@emailjs/browser';
 import './Contact.scss';
 
 export default function Contact() {
@@ -36,6 +37,29 @@ export default function Contact() {
 			imgPos: { offset: new kakao.current.maps.Point(116, 99) }
 		}
 	]); // 객체로 값을 담음
+
+	const form = useRef();
+
+	const resetForm = () => {
+		const elArr = form.current.children;
+		Array.form(elArr).forEach(el => {
+			if (el.name === 'user_name' || el.name === 'user_email' || el.name === 'message')
+				el.value = '';
+		});
+	};
+
+	const sendEmail = e => {
+		e.preventDefault();
+		emailjs.sendForm('service_zzree4j', 'template_w86wuw7', form.current, '5euWzAafCXgbAmv3z').then(
+			result => {
+				alert('문의 내용이 성공적으로 전송되었습니다.');
+				resetForm();
+			},
+			error => {
+				alert('일시적인 오류로 문의 전송에 실패하였습니다. 다음의 메일주소로 메일을 전송해주세요.');
+			}
+		);
+	};
 
 	// 마커 인스턴스 생성
 	marker.current = new kakao.current.maps.Marker({
@@ -106,27 +130,41 @@ export default function Contact() {
 
 	return (
 		<Layout title={'Contact'}>
-			<div className='controlBox'>
-				<nav className='branch'>
-					{mapInfo.current.map((el, idx) =>
-						//prettier-ignore
-						<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
-							{el.title}
+			<div id='mailSection'>
+				<form ref={form} onSubmit={sendEmail}>
+					<label>Name</label>
+					<input type='text' name='user_name' />
+					<label>Email</label>
+					<input type='email' name='user_email' />
+					<label>Message</label>
+					<textarea name='message' />
+					<input type='submit' value='Send' />
+				</form>
+			</div>
+
+			<div id='mapSection'>
+				<div className='controlBox'>
+					<nav className='branch'>
+						{mapInfo.current.map((el, idx) =>
+							//prettier-ignore
+							<button key={idx} onClick={() => setIndex(idx)} className={idx === Index ? 'on' : ''}>
+								{el.title}
+							</button>
+						)}
+					</nav>
+					<nav className='info'>
+						{' '}
+						{/* 함수 거의 없고 state 값에 따른 제어 */}
+						<button
+							onClick={() => {
+								setTraffic(!Traffic);
+							}}>
+							{Traffic ? 'Traffic OFF' : 'Traffic ON'}
 						</button>
-					)}
-				</nav>
-				<nav className='info'>
-					{' '}
-					{/* 함수 거의 없고 state 값에 따른 제어 */}
-					<button
-						onClick={() => {
-							setTraffic(!Traffic);
-						}}>
-						{Traffic ? 'Traffic OFF' : 'Traffic ON'}
-					</button>
-					<button onClick={() => setView(!View)}>{View ? 'map' : 'road view'}</button>
-					<button onClick={setCenter}>위치 초기화</button>
-				</nav>
+						<button onClick={() => setView(!View)}>{View ? 'map' : 'road view'}</button>
+						<button onClick={setCenter}>위치 초기화</button>
+					</nav>
+				</div>
 			</div>
 			<section className='tab'>
 				<article className={`mapBox ${View ? '' : 'on'}`} ref={mapFrame}></article>
