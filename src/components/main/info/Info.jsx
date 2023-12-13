@@ -1,6 +1,6 @@
 import { useCustomText } from '../../../hooks/useText';
 import './Info.scss';
-import postData from './dummyPost.json';
+import postData from './dummyPosts.json';
 import { useState } from 'react';
 
 export default function Info() {
@@ -8,8 +8,11 @@ export default function Info() {
 
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
-		if (data) return JSON.parse(data);
-		else return postData.dummyPost;
+		if (data) {
+			return JSON.parse(data);
+		} else {
+			return postData.dummyPosts;
+		}
 	};
 	const [Post] = useState(getLocalData());
 

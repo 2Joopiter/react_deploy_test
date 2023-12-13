@@ -11,7 +11,7 @@ export default function Community() {
 		const data = localStorage.getItem('post');
 		if (data) return JSON.parse(data);
 	};
-	const [Post, setPost] = useState(getLocalData());
+	const [Post, setPost] = useState(getLocalData() || []);
 	const refTit = useRef(null);
 	const refCon = useRef(null);
 	const refEditTit = useRef(null);
@@ -103,56 +103,52 @@ export default function Community() {
 					</nav>
 				</div>
 				<div className='showBox'>
-					{Post.map((el, idx) => {
-						const date = JSON.stringify(el.date);
-						const strDate = changeText(date.split('T')[0].slice(1), '.');
-						const strTime = changeText(date?.split('T')[1].slice(0, 5), '.');
+					{Post &&
+						Post.map((el, idx) => {
+							const date = JSON.stringify(el.date);
+							const strDate = changeText(date.split('T')[0].slice(1), '.');
 
-						if (el.enableUpdate) {
-							// 수정모드
-							return (
-								<article key={el + idx}>
-									<div className='txt'>
-										<input type='text' defaultValue={el.title} ref={refEditTit} />
-										<textarea
-											cols='30'
-											rows='4'
-											defaultValue={el.content}
-											ref={refEditCon}></textarea>
-										<span>
-											{strDate}/{strTime}
-										</span>
-									</div>
-									<nav>
-										<button onClick={() => updatePost(idx)}>Modify</button>
-										<button onClick={() => disableUpdate(idx)}>Cancel</button>
-									</nav>
-								</article>
-							);
-						} else {
-							// 출력모드
-							return (
-								<article key={el + idx}>
-									<div className='txt'>
-										<h2>{el.title}</h2>
-										<p>{el.content}</p>
-										<span>
-											{strDate}/{strTime}
-										</span>
-									</div>
-									<nav>
-										<button onClick={() => enableUpdate(idx)}>Edit</button>
-										<button
-											onClick={() => {
-												deletePost(idx);
-											}}>
-											Delete
-										</button>
-									</nav>
-								</article>
-							);
-						}
-					})}
+							if (el.enableUpdate) {
+								// 수정모드
+								return (
+									<article key={el + idx}>
+										<div className='txt'>
+											<input type='text' defaultValue={el.title} ref={refEditTit} />
+											<textarea
+												cols='30'
+												rows='4'
+												defaultValue={el.content}
+												ref={refEditCon}></textarea>
+											<span>{strDate}</span>
+										</div>
+										<nav>
+											<button onClick={() => updatePost(idx)}>Modify</button>
+											<button onClick={() => disableUpdate(idx)}>Cancel</button>
+										</nav>
+									</article>
+								);
+							} else {
+								// 출력모드
+								return (
+									<article key={el + idx}>
+										<div className='txt'>
+											<h2>{el.title}</h2>
+											<p>{el.content}</p>
+											<span>{strDate}</span>
+										</div>
+										<nav>
+											<button onClick={() => enableUpdate(idx)}>Edit</button>
+											<button
+												onClick={() => {
+													deletePost(idx);
+												}}>
+												Delete
+											</button>
+										</nav>
+									</article>
+								);
+							}
+						})}
 				</div>
 			</div>
 		</Layout>

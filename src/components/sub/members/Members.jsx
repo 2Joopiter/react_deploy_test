@@ -2,6 +2,7 @@ import Layout from '../../common/layout/Layout';
 import './Members.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDebounce } from '../../../hooks/useDebounce';
 
 export default function Members() {
 	const history = useHistory();
@@ -17,6 +18,7 @@ export default function Members() {
 	});
 	const [Val, setVal] = useState(initVal.current);
 	const [Errs, setErrs] = useState({});
+	const DebounceVal = useDebounce(Val, 1500);
 
 	const handleReset = () => {
 		setVal(initVal.current);
@@ -72,8 +74,8 @@ export default function Members() {
 	};
 
 	useEffect(() => {
-		setErrs(check(Val));
-	}, [Val]);
+		setErrs(check(DebounceVal));
+	}, [DebounceVal]);
 
 	return (
 		<Layout title={'Members'}>
