@@ -81,16 +81,9 @@ export default function Community() {
 			})
 		);
 	};
-
-	const filterText = txt => {
-		Post.filter(el => el.title.indexOf(txt) >= 0 || el.content.indexOf(txt) >= 0);
-	};
-
 	useEffect(() => {
 		// Post 데이터가 변경되면 수정모드를 강제로 false처리하면서 로컬저장소에 저장하고 컴포넌트 재실행
-		Post.map(el => {
-			el.enableUpdate = false;
-		});
+		Post.map(el => (el.enableUpdate = false));
 		localStorage.setItem('post', JSON.stringify(Post));
 	}, [Post]);
 
@@ -112,7 +105,7 @@ export default function Community() {
 				<div className='showBox'>
 					{Post.map((el, idx) => {
 						const date = JSON.stringify(el.date);
-						const strDate = changeText(date?.split('T')[0].slice(1), '.');
+						const strDate = changeText(date.split('T')[0].slice(1), '.');
 						const strTime = changeText(date?.split('T')[1].slice(0, 5), '.');
 
 						if (el.enableUpdate) {

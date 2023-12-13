@@ -1,14 +1,15 @@
-import './Info.scss';
 import { useCustomText } from '../../../hooks/useText';
+import './Info.scss';
 import postData from './dummyPost.json';
 import { useState } from 'react';
 
 export default function Info() {
 	const changeText = useCustomText('combined');
+
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
 		if (data) return JSON.parse(data);
-		else return postData.dummyPosts;
+		else return postData.dummyPost;
 	};
 	const [Post] = useState(getLocalData());
 
@@ -30,7 +31,6 @@ export default function Info() {
 						</article>
 					);
 				})}
-				;
 			</div>
 		</section>
 	);

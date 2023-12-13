@@ -1,8 +1,10 @@
 import Layout from '../../common/layout/Layout';
 import './Members.scss';
 import { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 export default function Members() {
+	const history = useHistory();
 	const initVal = useRef({
 		userid: '',
 		pwd1: '',
@@ -15,6 +17,10 @@ export default function Members() {
 	});
 	const [Val, setVal] = useState(initVal.current);
 	const [Errs, setErrs] = useState({});
+
+	const handleReset = () => {
+		setVal(initVal.current);
+	};
 
 	const handleChange = e => {
 		//const key = e.target.name; // userid
@@ -36,6 +42,8 @@ export default function Members() {
 		const num = /[0-9]/;
 		const txt = /[a-zA-Z]/;
 		const spc = /[~!@#$%^&*()[\]_.+]/;
+		const [m1, m2] = value.email.split('@');
+		const m3 = m2 && m2.split('.');
 
 		if (
 			!num.test(value.pwd1) ||
@@ -51,25 +59,20 @@ export default function Members() {
 		if (!value.gender) errs.gender = '성별을 선택하세요';
 		if (value.interest.length === 0) errs.interest = '관심사를 하나이상 선택하세요.';
 		if (!value.edu) errs.edu = '최종학력을 선택하세요.';
-		if (!/@/.test(value.email)) {
-			errs.email = '이메일 주소에는 @를 포함해야 합니다';
-		} else {
-			const [forward, backward] = value.email.split('@');
-			if (!forward || !backward) {
-				errs.email = '@의 앞뒤에 모두 문자가 포함되어야 합니다';
-			} else {
-				const [forward, backward] = value.email.split('.');
-				if (!forward || !backward) {
-					errs.email = '.의 앞뒤에 문자가 모두 문자가 포함되어야 합니다';
-				}
-			}
-		}
+		if (!m1 || !m2 || !m3[0] || !m3[1]) errs.email = '올바른 이메일 형식으로 입력하세요';
 		return errs;
+	};
+
+	const handleSubmit = e => {
+		e.preventDefault();
+		if (Object.keys(check(Val)).length === 0) {
+			alert('회원가입을 축하합니다!');
+			history.push('/');
+		}
 	};
 
 	useEffect(() => {
 		setErrs(check(Val));
-		
 	}, [Val]);
 
 	return (
@@ -78,7 +81,7 @@ export default function Members() {
 				<div className='infoBox'>
 					<h2>Join Members</h2>
 				</div>
-				<div className='formBox'>
+				<div className='formBox' onClick={handleSubmit}>
 					<form>
 						<fieldset>
 							<legend className='h'>회원가입 폼</legend>
@@ -224,7 +227,7 @@ export default function Members() {
 									</tr>
 									<tr>
 										<td colSpan='2'>
-											<input type='reset' value='Cancel' />
+											<input type='reset' value='Cancel' onClick={handleReset} />
 											<input type='submit' value='Submit' />
 										</td>
 									</tr>
