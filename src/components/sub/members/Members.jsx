@@ -1,19 +1,20 @@
 import Layout from '../../common/layout/Layout';
 import './Members.scss';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Members() {
 	const initVal = useRef({
 		userid: '',
-		email: '',
-		comments: '',
 		pwd1: '',
 		pwd2: '',
+		email: '',
+		comments: '',
 		edu: '',
 		gender: '',
 		interest: []
 	});
 	const [Val, setVal] = useState(initVal.current);
+	const [Errs, setErrs] = useState({});
 
 	const handleChange = e => {
 		//const key = e.target.name; // userid
@@ -29,6 +30,47 @@ export default function Members() {
 		inputs.forEach(input => input.checked && checkArr.push(input.value));
 		setVal({ ...Val, [name]: checkArr });
 	};
+
+	const check = value => {
+		const errs = {};
+		const num = /[0-9]/;
+		const txt = /[a-zA-Z]/;
+		const spc = /[~!@#$%^&*()[\]_.+]/;
+
+		if (
+			!num.test(value.pwd1) ||
+			!txt.test(value.pwd1) ||
+			!spc.test(value.pwd1) ||
+			value.pwd1.length < 8
+		)
+			errs.pwd1 = '비밀번호는 특수문자, 문자, 숫자를 모두 포함해서 8글자 이상 입력하세요';
+		if (value.pwd1 !== value.pwd2 || !value.pwd2) errs.pwd2 = '두개의 비밀번호를 같게 입력하세요';
+		if (!num.test(value.pwd2) || !txt.test(value.pw2) || !spc.test(value.pw2));
+		if (value.userid.length < 5) errs.userid = '아이디는 최소 5글자 이상 입력하세요';
+		if (value.comments.length < 10) errs.comments = '남기는 말은 최소 10글자 이상 입력하세요';
+		if (!value.gender) errs.gender = '성별을 선택하세요';
+		if (value.interest.length === 0) errs.interest = '관심사를 하나이상 선택하세요.';
+		if (!value.edu) errs.edu = '최종학력을 선택하세요.';
+		if (!/@/.test(value.email)) {
+			errs.email = '이메일 주소에는 @를 포함해야 합니다';
+		} else {
+			const [forward, backward] = value.email.split('@');
+			if (!forward || !backward) {
+				errs.email = '@의 앞뒤에 모두 문자가 포함되어야 합니다';
+			} else {
+				const [forward, backward] = value.email.split('.');
+				if (!forward || !backward) {
+					errs.email = '.의 앞뒤에 문자가 모두 문자가 포함되어야 합니다';
+				}
+			}
+		}
+		return errs;
+	};
+
+	useEffect(() => {
+		setErrs(check(Val));
+		
+	}, [Val]);
 
 	return (
 		<Layout title={'Members'}>
@@ -52,6 +94,7 @@ export default function Members() {
 												placeholder='User ID'
 												onChange={handleChange}
 											/>
+											{Errs.userid && <p>{Errs.userid}</p>}
 										</td>
 										<td>
 											<input
@@ -61,6 +104,7 @@ export default function Members() {
 												onChange={handleChange}
 												placeholder='Email'
 											/>
+											{Errs.email && <p>{Errs.email}</p>}
 										</td>
 									</tr>
 
@@ -74,6 +118,7 @@ export default function Members() {
 												value={Val.pwd1}
 												onChange={handleChange}
 											/>
+											{Errs.pwd1 && <p>{Errs.pwd1}</p>}
 										</td>
 										<td>
 											<input
@@ -83,6 +128,7 @@ export default function Members() {
 												value={Val.pwd2}
 												onChange={handleChange}
 											/>
+											{Errs.pwd2 && <p>{Errs.pwd2}</p>}
 										</td>
 									</tr>
 
@@ -96,6 +142,7 @@ export default function Members() {
 												<option value='high-school'>고등학교 졸업</option>
 												<option value='college'>대학교 졸업</option>
 											</select>
+											{Errs.edu && <p>{Errs.edu}</p>}
 										</td>
 									</tr>
 
@@ -119,6 +166,7 @@ export default function Members() {
 												onChange={handleChange}
 											/>
 											<label htmlFor='male'>Male</label>
+											{Errs.gender && <p>{Errs.gender}</p>}
 										</td>
 									</tr>
 
@@ -157,6 +205,7 @@ export default function Members() {
 												onChange={handleCheck}
 											/>
 											<label htmlFor='game'>Game</label>
+											{Errs.interest && <p>{Errs.interest}</p>}
 										</td>
 									</tr>
 
@@ -170,6 +219,7 @@ export default function Members() {
 												placeholder='Leave a comment'
 												value={Val.comments}
 												onChange={handleChange}></textarea>
+											{Errs.comments && <p>{Errs.comments}</p>}
 										</td>
 									</tr>
 									<tr>
