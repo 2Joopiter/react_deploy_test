@@ -13,12 +13,26 @@ import Detail from './components/sub/youtube/Detail';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { useMedia } from './hooks/useMedia';
 
 export default function App() {
+	const dispatch = useDispatch();
 	const [Dark, setDark] = useState();
 	const [Toggle, setToggle] = useState(false);
+	const path = useRef(process.env.PUBLIC_URL);
+
+	const fetchDepartment = () => {
+		fetch(`${path.current}/DB/department.json`)
+			.then(data => data.json())
+			.then(json => {
+				console.log(json.members);
+				dispatch({ type: 'SET_MEMBERS', payload: json.members });
+			});
+	};
+
+	useEffect(() => fetchDepartment(), []);
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>

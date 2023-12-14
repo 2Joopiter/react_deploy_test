@@ -6,11 +6,8 @@ import { useSelector } from 'react-redux';
 
 export default function Department() {
 	const MemberData = useSelector(store => store.memberReducer.members); // 전역 데이터이기에 MemberData가 필요한 모든 곳에 가져다 쓰면 출력 가능
-	// const [MemberData, setMemberData] = useState([]);
-	// const [MemberTit, setMemberTit] = useState('');
-	const path = useRef(process.env.PUBLIC_URL);
 	const combinedTitle = useCustomText('combined');
-
+	const path = useRef(process.env.PUBLIC_URL);
 	const [HistoryTit, setHistoryTit] = useState('');
 	const [HistoryData, setHistoryData] = useState([]);
 
@@ -24,20 +21,7 @@ export default function Department() {
 			});
 	};
 
-	/*
-	const fetchDepartment = () => {
-		fetch(`${path.current}/DB/department.json`)
-			.then((data) => data.json())
-			.then((json) => {
-				console.log(json);
-				setMemberTit(Object.keys(json)[0]);
-				setMemberData(Object.values(json)[0]);
-			});
-	};
-	*/
-
 	useEffect(() => {
-		// fetchDepartment();
 		fetchHistory();
 	}, []);
 

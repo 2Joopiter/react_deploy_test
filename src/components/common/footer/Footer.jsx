@@ -7,14 +7,12 @@ import { useSelector } from 'react-redux';
 // npm i react-icons (기본 아이콘 설치 가능)
 
 export default function Footer() {
-	const { name, position } = useSelector(store => store.memberReducer.members[0]);
+	// const memberData = useSelector(store => store.memberReducer.members);
 	return (
 		<footer className='Footer'>
 			<h1>Home</h1>
 			<p>2023 home &copy; All Right Reserved. </p>
-			<p>
-				{position}:{name}
-			</p>
+			{/*}<p>{memberData && `${memberData[0]?.position}:${memberData[0]?.name}`}</p>*/}
 			<ul>
 				<li>
 					<TiSocialInstagram />
