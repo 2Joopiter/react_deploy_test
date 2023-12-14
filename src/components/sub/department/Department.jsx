@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
+import { useSelector } from 'react-redux';
 
 export default function Department() {
-	const [MemberData, setMemberData] = useState([]);
-	const [MemberTit, setMemberTit] = useState('');
+	const MemberData = useSelector(store => store.memberReducer.members); // 전역 데이터이기에 MemberData가 필요한 모든 곳에 가져다 쓰면 출력 가능
+	// const [MemberData, setMemberData] = useState([]);
+	// const [MemberTit, setMemberTit] = useState('');
 	const path = useRef(process.env.PUBLIC_URL);
 	const combinedTitle = useCustomText('combined');
 
@@ -14,14 +16,15 @@ export default function Department() {
 
 	const fetchHistory = () => {
 		fetch(`${path.current}/DB/history.json`)
-			.then((data) => data.json())
-			.then((json) => {
+			.then(data => data.json())
+			.then(json => {
 				console.log(json);
 				setHistoryTit(Object.keys(json)[0]);
 				setHistoryData(Object.values(json)[0]);
 			});
 	};
 
+	/*
 	const fetchDepartment = () => {
 		fetch(`${path.current}/DB/department.json`)
 			.then((data) => data.json())
@@ -31,11 +34,10 @@ export default function Department() {
 				setMemberData(Object.values(json)[0]);
 			});
 	};
+	*/
 
 	useEffect(() => {
-		fetchDepartment();
-	}, []);
-	useEffect(() => {
+		// fetchDepartment();
 		fetchHistory();
 	}, []);
 
@@ -61,7 +63,7 @@ export default function Department() {
 			</section>
 
 			<section className='memberBox'>
-				<h2>{combinedTitle(MemberTit)}</h2>
+				<h2>{combinedTitle('Members')}</h2>
 				<div className='con'>
 					{MemberData.map((member, idx) => {
 						return (
