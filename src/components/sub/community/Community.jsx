@@ -1,34 +1,35 @@
+import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Community.scss';
-import { MdClose } from 'react-icons/md';
-import { IoMdCreate } from 'react-icons/io';
-import { useEffect, useRef, useState } from 'react';
+import { ImCancelCircle } from 'react-icons/im';
+import { TfiWrite } from 'react-icons/tfi';
 import { useCustomText } from '../../../hooks/useText';
 
 export default function Community() {
 	const changeText = useCustomText('combined');
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
-		if (data) return JSON.parse(data);
+		return JSON.parse(data);
 	};
-	const [Post, setPost] = useState(getLocalData() || []);
+	const [Post, setPost] = useState(getLocalData());
 	const refTit = useRef(null);
 	const refCon = useRef(null);
 	const refEditTit = useRef(null);
 	const refEditCon = useRef(null);
 	const editMode = useRef(false);
 
+	//input 초기화 함수
 	const resetPost = () => {
 		refTit.current.value = '';
 		refCon.current.value = '';
 	};
 
+	//글 저장 함수
 	const createPost = () => {
 		if (!refTit.current.value.trim() || !refCon.current.value.trim()) {
 			resetPost();
-			return alert('제목과 본문을 모두 입력하세요');
+			return alert('제목과 본문을 모두 입력하세요.');
 		}
-
 		const korTime = new Date().getTime() + 1000 * 60 * 60 * 9;
 		setPost([
 			{ title: refTit.current.value, content: refCon.current.value, date: new Date(korTime) },
@@ -37,12 +38,13 @@ export default function Community() {
 		resetPost();
 	};
 
-	// 글 수정 함수
+	//글 수정 함수
 	const updatePost = updateIndex => {
 		if (!refEditTit.current.value.trim() || !refEditCon.current.value.trim()) {
-			return alert('수정할 글의 제목과 본문을 모두 입력하세요');
+			return alert('수정할 글의 제목과  본문을 모두 입력하세요.');
 		}
 		editMode.current = false;
+
 		setPost(
 			Post.map((el, idx) => {
 				if (updateIndex === idx) {
@@ -55,12 +57,16 @@ export default function Community() {
 		);
 	};
 
+	//글 삭제 함수
 	const deletePost = delIndex => {
-		if (!window.confirm('정말 해당 게시글을 삭제하겠습니까?')) return; //confirm-alert에 확인기능까지 추가된 팝업창
+		//console.log(delIndex);
+		//기존 map과 마찬가지로 기존 배열값을 deep copy해서 새로운배열 반환
+		//이때 안쪽에 조건문을 처리해서 특정 조건에 부합되는 값만 filtering해서 리턴
+		if (!window.confirm('정말 해당 게시글을 삭제하겠습니까?')) return;
 		setPost(Post.filter((_, idx) => delIndex !== idx));
 	};
 
-	//수정모드 변경 함수
+	//수정모드 변경함수
 	const enableUpdate = editIndex => {
 		if (editMode.current) return;
 		editMode.current = true;
@@ -72,6 +78,7 @@ export default function Community() {
 		);
 	};
 
+	//출력모드 변경함수
 	const disableUpdate = editIndex => {
 		editMode.current = false;
 		setPost(
@@ -81,8 +88,9 @@ export default function Community() {
 			})
 		);
 	};
+
 	useEffect(() => {
-		// Post 데이터가 변경되면 수정모드를 강제로 false처리하면서 로컬저장소에 저장하고 컴포넌트 재실행
+		//Post데이터가 변경되면 수정모드를 강제로 false처리하면서 로컬저장소에 저장하고 컴포넌트 재실행
 		Post.map(el => (el.enableUpdate = false));
 		localStorage.setItem('post', JSON.stringify(Post));
 	}, [Post]);
@@ -92,63 +100,60 @@ export default function Community() {
 			<div className='communityWrap'>
 				<div className='inputBox'>
 					<input type='text' placeholder='title' ref={refTit} />
-					<textarea cols='30' rows='6' placeholder='content' ref={refCon}></textarea>
+					<textarea cols='30' rows='3' placeholder='content' ref={refCon}></textarea>
+
 					<nav>
-						<button onClick={createPost}>
-							<IoMdCreate />
-						</button>
 						<button onClick={resetPost}>
-							<MdClose />
+							<ImCancelCircle />
+						</button>
+						<button onClick={createPost}>
+							<TfiWrite />
 						</button>
 					</nav>
 				</div>
-				<div className='showBox'>
-					{Post &&
-						Post.map((el, idx) => {
-							const date = JSON.stringify(el.date);
-							const strDate = changeText(date.split('T')[0].slice(1), '.');
 
-							if (el.enableUpdate) {
-								// 수정모드
-								return (
-									<article key={el + idx}>
-										<div className='txt'>
-											<input type='text' defaultValue={el.title} ref={refEditTit} />
-											<textarea
-												cols='30'
-												rows='4'
-												defaultValue={el.content}
-												ref={refEditCon}></textarea>
-											<span>{strDate}</span>
-										</div>
-										<nav>
-											<button onClick={() => updatePost(idx)}>Modify</button>
-											<button onClick={() => disableUpdate(idx)}>Cancel</button>
-										</nav>
-									</article>
-								);
-							} else {
-								// 출력모드
-								return (
-									<article key={el + idx}>
-										<div className='txt'>
-											<h2>{el.title}</h2>
-											<p>{el.content}</p>
-											<span>{strDate}</span>
-										</div>
-										<nav>
-											<button onClick={() => enableUpdate(idx)}>Edit</button>
-											<button
-												onClick={() => {
-													deletePost(idx);
-												}}>
-												Delete
-											</button>
-										</nav>
-									</article>
-								);
-							}
-						})}
+				<div className='showBox'>
+					{Post.map((el, idx) => {
+						const date = JSON.stringify(el.date);
+						const strDate = changeText(date.split('T')[0].slice(1), '.');
+
+						if (el.enableUpdate) {
+							//수정모드
+							return (
+								<article key={el + idx}>
+									<div className='txt'>
+										<input type='text' defaultValue={el.title} ref={refEditTit} />
+										<textarea
+											cols='30'
+											rows='4'
+											defaultValue={el.content}
+											ref={refEditCon}></textarea>
+										<span>{strDate}</span>
+									</div>
+									<nav>
+										{/* 수정모드 일때 해당 버튼 클릭시 다시 출력모드 변경 */}
+										<button onClick={() => disableUpdate(idx)}>Cancel</button>
+										<button onClick={() => updatePost(idx)}>Update</button>
+									</nav>
+								</article>
+							);
+						} else {
+							//출력모드
+							return (
+								<article key={el + idx}>
+									<div className='txt'>
+										<h2>{el.title}</h2>
+										<p>{el.content}</p>
+										<span>{strDate}</span>
+									</div>
+									<nav>
+										<button onClick={() => enableUpdate(idx)}>Edit</button>
+										<button onClick={() => deletePost(idx)}>Delete</button>
+									</nav>
+								</article>
+							);
+						}
+					})}
 				</div>
 			</div>
 		</Layout>
@@ -156,37 +161,31 @@ export default function Community() {
 }
 
 /*
-	<작업 과정>
-	1. input박스(글 입력 박스), 글 출력박스를 생성
-	2. 전체 글을 관리할 배열 state를 생성 [{글정보1}}, {글정보2}, {글정보3}] 같은 느낌으로
-	3. 글 입력박스에 글 입력 후 저장 버튼 클릭시 그 정보를 객체형태로 state에 계속 추가 (Create 기능)
-	4. state 배열에 추가된 값들을 반복돌면서 글 리스트 출력 (Read)
-	5. 글 출력시 삭제, 수정버튼 추가해서 출력
-	6. 글 리스트에서 삭제버튼 클릭시 해당 배열의 state에서 이벤트가 발생한 순번의 객체를 제거해서 글 삭제(Delete 기능)
+	1.글입력 박스, 글 출력박스를 생성
+	2.전체글을 관리할 배열 state를 생성 [{글정보1}, {글정보2}, {글정보3}]
+	3.글입력박스에 글 입력후 저장 버튼 클릭시 글 정보를 객체형태로 state계속 추가 (Create)
+	4.state 배열에 추가된값들을 반복돌면서 글 리스트 출력 (Read)
+	5.글출력시 삭제, 수정버튼 추가해서 출력
+	6.글리스트에서 삭제 버튼 클릭시 배열State에서 이벤트가 발생한 순번의 객체를 제거해서 글삭제 (Delete)
 
-	C (Create/데이터 저장) 예> 글 작성
-	R (Read/데이터 호출)   예> 글 목록보기
-	U (Update/데이터 변경) 예> 글 수정
-	D (Delete/데이터 삭제) 예> 글 삭제
+	Create (데이터저장) 글작성
+	Read (데이터호출) 글목록 보기
+	Update (데이터변경) 글 수정
+	Delete (데이터삭제) 글 삭제
 
-*/
+	LocalStorage: 모든 브라우저가 내장하고 있는 경량의 저장소
+	-- 문자값만 저장가능 (5MB)
+	-- 로컬저장소에 문자열이외의 값을 저장할때에는 강제로 문자화시켜서 저장
+	-- 로컬저장소의 값을 JS로 가져올떄에는 문자값을 반대로 객체화시켜서 호출
 
-/*
-- LocalStorage: 모든 브라우저가 내장하고 있는 경량의 저장소
-    - 문자값만 저장 가능 (최대 5MB)
-    - 로컬 저장소에 문자열 이외의 값을 저장할 때에는 강제로 문자화시켜서 저장해야 함
-    - 로컬저장소의 값을 JS로 가져올 때에는 반대로 문자값을 객체화 시켜서 호출해야 함
+	localStorage객체에 활용가능한 메서드
+	- setItem('키','문자화된 데이터'); 해당 키값에 데이터를 담아서 저장
+	- getItem('키') : 해당 키값에 매칭이 되는 데이터를 가져옴
 
-- LocalStorage 객체에 활용 가능한 메서드
-    - setItem(’키값’,’문자화로 저장된 데이터’); 해당 key 값에 데이터를 담아서 저장
-    - getItem(’키값’): 해당 key값에 매칭이 되는 데이터를 가져옴
-*/
-
-/*
 	글 수정 로직 단계
-	1. 각 포스트에서 수정 버튼 클릭시 해당 객체에 enableUpdate=true라는 property를 동적으로 추가후 state에 저장
-	2. 다음번 렌더링 사이클에서 포스트를 반복돌며 객체에 enableUpdate 값이 true이면 제목 본문을 input요소에 담아서 출력하도록 분기처리 (수정모드로 분기처리해서 출력되도록)
-	3. 수정모드일때는 버튼도 수정 취소, 수정 완료로 변경(생성)
-	4. 수정모드에서 수정 취소버튼 클릭시 해당 포스트 객체에 enableUpdate=false로 변경해서 다시 출력모드를 변경
-	5. 수정모드에서 수정 완료 클릭시 해당 폼 요소에 수정된 value값을 가져와서 저장한 뒤 다시 출력모드 변경
+	1. 각 포스트에서 수정 버튼 클릭시 해당 객체에 enableUpdat=true라는 프로퍼티를 동적으로 추가후 state저장
+	2. 다음번 렌더링 사이클에서 포스트를 반복돌며 객체에 enableUpate값이 true이면을 제목 본문을 input요소에 담아서 출력하도록 분기처리 (출력시 수정모드로 분기처리해서 출력)
+	3. 수정모드일때는 수정취소, 수정완료 버튼 생성
+	4, 수정모드에서 수정취소 버튼 클릭시 해당 포스트 객체에 enableUpdate=false로 변경해서 다시 출력모드 변경
+	5. 수정모드에서 수정완료 버튼 클릭시 해당 폼요소에 수정된 value값을 가져와서 저장한뒤 다시 출력모드 변경
 */

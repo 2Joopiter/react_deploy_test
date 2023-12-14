@@ -5,7 +5,6 @@ import { useSplitText } from '../../../hooks/useText';
 export default function Layout({ children, title }) {
 	const refFrame = useRef(null);
 	const refTitle = useRef(null);
-
 	const splitText = useSplitText();
 
 	useEffect(() => {
@@ -13,7 +12,7 @@ export default function Layout({ children, title }) {
 		setTimeout(() => {
 			refFrame.current.classList.add('on');
 		}, 300);
-	}, []);
+	}, [splitText, title]);
 
 	return (
 		<main ref={refFrame} className={`Layout ${title}`}>

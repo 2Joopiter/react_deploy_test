@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Layout from '../../common/layout/Layout';
 import emailjs from '@emailjs/browser';
 import './Contact.scss';
@@ -81,7 +81,7 @@ export default function Contact() {
 	});
 
 	// 로드뷰 함수
-	const roadView = () => {
+	const roadView = useRef(() => {
 		new kakao.current.maps.RoadviewClient().getNearestPanoId(
 			mapInfo.current[Index].latlng,
 			100,
@@ -92,13 +92,13 @@ export default function Contact() {
 				);
 			}
 		);
-	};
+	});
 
 	// 지도위치 갱신시키는 함수
-	const setCenter = () => {
+	const setCenter = useCallback(() => {
 		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
-		roadView();
-	};
+		roadView.current();
+	}, [Index]);
 
 	// 컴포넌트 마운트시 참조객체에 담아놓은 돔 프레임에 지도 인스턴트 출력 및 마커 생성
 	// 일일이 제어해야 하는 값을 state 정보값으로 한번에 제어 가능해짐
@@ -112,24 +112,21 @@ export default function Contact() {
 		setTraffic(false);
 		setView(false);
 
-		roadView();
+		roadView.current();
 
-		// 지도타입 컨트롤러 추가
 		mapInstance.current.addControl(
 			new kakao.current.maps.MapTypeControl(),
 			kakao.current.maps.ControlPosition.TOPRIGHT
 		);
-		// 지도 줌 컨트롤러 추가
 		mapInstance.current.addControl(
 			new kakao.current.maps.ZoomControl(),
 			kakao.current.maps.ControlPosition.RIGHT
 		);
-		// 휠로 맵 줌 기능 비활성화
-		mapInstance.current.setZoomable(false); // 마우스 휠로 맵 줌/아웃 기능 비활성화(true로 바꾸면 다시 활성화)
+		mapInstance.current.setZoomable(false);
 
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
-	}, [Index]);
+	}, [setCenter]);
 
 	useEffect(() => {
 		Traffic

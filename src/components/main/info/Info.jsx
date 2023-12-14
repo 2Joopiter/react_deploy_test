@@ -8,11 +8,8 @@ export default function Info() {
 
 	const getLocalData = () => {
 		const data = localStorage.getItem('post');
-		if (data) {
-			return JSON.parse(data);
-		} else {
-			return postData.dummyPosts;
-		}
+		if (data) return JSON.parse(data);
+		else return postData.dummyPosts;
 	};
 	const [Post] = useState(getLocalData());
 
