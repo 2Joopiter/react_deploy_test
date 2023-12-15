@@ -1,8 +1,5 @@
 import { combineReducers } from 'redux';
 
-// 순서1. reducer 함수 호출되면서 빈 배열로 멤버 데이터가 저장될 state값을 초기화
-// (컴포넌트 마운트 전이기 때문에 빈배열로 초기화해둠)
-// 순서2. App.jsx로~
 const memberReducer = (state = [], action) => {
 	switch (action.type) {
 		case 'SET_MEMBERS':
@@ -12,5 +9,7 @@ const memberReducer = (state = [], action) => {
 	}
 };
 
+const 
+
 const reducers = combineReducers({ memberReducer });
-export default reducers;
+export default reducers; // memberReducer의 switch 함수를 combineReducers로 한개의 리듀싱 함수로 묶어서 reducers로 변수정의해서 출력(export)해줌
