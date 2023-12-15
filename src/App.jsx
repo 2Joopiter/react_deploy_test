@@ -13,7 +13,7 @@ import Detail from './components/sub/youtube/Detail';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useMedia } from './hooks/useMedia';
 
@@ -29,7 +29,16 @@ export default function App() {
 		dispatch({ type: 'SET_MEMBERS', payload: json.members });
 	}, [dispatch]);
 
-	useEffect(() => fetchDepartment(), [fetchDepartment]);
+	const fetchHistory = useCallback(async () => {
+		const data = await fetch(`${path.current}/DB/history.json`);
+		const json = await data.json();
+		dispatch({ type: 'SET_HISTORY', payload: json.history });
+	}, [dispatch]);
+
+	useEffect(() => {
+		fetchDepartment();
+		fetchHistory();
+	}, [fetchDepartment, fetchHistory]);
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>

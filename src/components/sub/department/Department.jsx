@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
@@ -6,29 +6,14 @@ import { useSelector } from 'react-redux';
 
 export default function Department() {
 	const MemberData = useSelector(store => store.memberReducer.members); // 전역 데이터이기에 MemberData가 필요한 모든 곳에 가져다 쓰면 출력 가능
+	const HistoryData = useSelector(store => store.historyReducer.history);
 	const combinedTitle = useCustomText('combined');
 	const path = useRef(process.env.PUBLIC_URL);
-	const [HistoryTit, setHistoryTit] = useState('');
-	const [HistoryData, setHistoryData] = useState([]);
-
-	const fetchHistory = () => {
-		fetch(`${path.current}/DB/history.json`)
-			.then(data => data.json())
-			.then(json => {
-				console.log(json);
-				setHistoryTit(Object.keys(json)[0]);
-				setHistoryData(Object.values(json)[0]);
-			});
-	};
-
-	useEffect(() => {
-		fetchHistory();
-	}, []);
 
 	return (
 		<Layout title={'Department'}>
 			<section className='historyBox'>
-				<h2>{combinedTitle(HistoryTit)}</h2>
+				<h2>{combinedTitle('History')}</h2>
 				<div className='con'>
 					{/* {2016: 배열} */}
 					{HistoryData.map((history, idx) => {
