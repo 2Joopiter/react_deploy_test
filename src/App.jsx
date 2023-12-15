@@ -9,6 +9,7 @@ import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
+import * as types from './redux/action';
 
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
@@ -26,13 +27,13 @@ export default function App() {
 	const fetchDepartment = useCallback(async () => {
 		const data = await fetch(`${path.current}/DB/department.json`);
 		const json = await data.json();
-		dispatch({ type: 'SET_MEMBERS', payload: json.members });
+		dispatch({ type: types.MEMBER.success, payload: json.members });
 	}, [dispatch]);
 
 	const fetchHistory = useCallback(async () => {
 		const data = await fetch(`${path.current}/DB/history.json`);
 		const json = await data.json();
-		dispatch({ type: 'SET_HISTORY', payload: json.history });
+		dispatch({ type: types.HISTORY.success, payload: json.history });
 	}, [dispatch]);
 
 	const fetchYoutube = useCallback(async () => {
@@ -44,9 +45,9 @@ export default function App() {
 		try {
 			const data = await fetch(baseURL);
 			const json = await data.json();
-			dispatch({ type: 'SET_YOUTUBE', payload: json.items });
+			dispatch({ type: types.YOUTUBE.success, payload: json.items });
 		} catch (err) {
-			dispatch({ type: 'SET_YOUTUBE_ERR', payload: err });
+			dispatch({ type: types.YOUTUBE.fail, payload: err });
 		}
 	}, [dispatch]);
 
