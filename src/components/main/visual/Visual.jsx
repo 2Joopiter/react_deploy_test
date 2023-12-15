@@ -20,12 +20,13 @@ export default function Visual() {
 				) : (
 					YoutubeData?.map((vid, idx) => {
 						console.log(vid);
-						if (idx >= 4) return null;
+						if (idx >= 3) return null;
 						return (
 							<article key={vid.id}>
 								<div className='pic'>
-									<img src={vid.snippet.thumbnails.default.url} alt={vid.snippet.title} />
+									<img src={vid.snippet.thumbnails.standard.url} alt={vid.snippet.title} />
 								</div>
+								<h2>{vid.snippet.title}</h2>
 							</article>
 						);
 					})
