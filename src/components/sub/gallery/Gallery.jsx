@@ -5,15 +5,17 @@ import './Gallery.scss';
 import { LuSearch } from 'react-icons/lu';
 import Modal from '../../common/modal/Modal';
 import { useCustomText } from '../../../hooks/useText';
+import { useDispatch } from 'react-redux';
+import * as types from '../../../redux/action';
 
 export default function Gallery() {
+	const dispatch = useDispatch();
 	const [Pics, setPics] = useState([]);
 	const myID = useRef('199646606@N06');
 	const refFrameWrap = useRef(null);
 	const refNav = useRef(null);
 	const gap = useRef(20);
 	const isUser = useRef(myID.current);
-	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
 	const shortenTxt = useCustomText('shorten');
 	const searched = useRef(false);
@@ -119,7 +121,7 @@ export default function Gallery() {
 										<div
 											className='pic'
 											onClick={() => {
-												setOpen(true);
+												dispatch({ type: types.MODAL.start, payload: true });
 												setIndex(idx);
 											}}>
 											<img
@@ -151,7 +153,7 @@ export default function Gallery() {
 			</Layout>
 
 			{
-				<Modal Open={Open} setOpen={setOpen}>
+				<Modal>
 					{Pics.length !== 0 && (
 						<img
 							src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}
