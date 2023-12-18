@@ -9,14 +9,22 @@ import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
+import * as types from './redux/actionType';
 
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMedia } from './hooks/useMedia';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function App() {
+	const dispatch = useDispatch();
+	useSelector(store => console.log(store));
+	useEffect(() => {
+		dispatch({ type: types.MEMBERS.start });
+	}, [dispatch]);
+
 	const [Dark, setDark] = useState();
 	const [Toggle, setToggle] = useState(false);
 
