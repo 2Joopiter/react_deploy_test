@@ -1,8 +1,13 @@
 import './Modal.scss';
 import { IoClose } from 'react-icons/io5';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSelector, useDispatch } from 'react-redux';
+import * as types from '../../../redux/action';
 
-export default function Modal({ Open, setOpen, children }) {
+export default function Modal({ children }) {
+	const dispatch = useDispatch();
+	const Open = useSelector(store => store.modalReducer.modal);
+
 	return (
 		<AnimatePresence>
 			{Open && (
@@ -22,7 +27,7 @@ export default function Modal({ Open, setOpen, children }) {
 					</motion.div>
 					<span
 						onClick={() => {
-							setOpen(false);
+							dispatch({ type: types.MODAL.stary, payload: false });
 						}}>
 						<IoClose />
 					</span>
