@@ -14,7 +14,7 @@ export default function Footer() {
 			{/* 아래 코드에서 조건문을 쓴 이유
 					첫 번째 렌더링시에는 store로부터 빈 배열이 전달되므로(undefined) 2번째 렌더링 때만 호출되도록. 
 					MemberData가 있을 때만 실행되게끔 조건문 처리 */}
-			{/*}<p>{memberData && `${memberData[0].position}:${memberData[0].name}`}</p>*/}
+			{/*}<p>{memberData[0]?.position}:{memberData[0]?.name}`}</p>*/}
 			<ul>
 				<li>
 					<TiSocialInstagram />
