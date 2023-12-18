@@ -12,8 +12,8 @@ const memberReducer = (state = [], action) => {
 
 const historyReducer = (state = [], action) => {
 	switch (action.type) {
-		case types.HISTORY.success:
-			return { ...state, history: action.payload };
+		case types.HISTORY.success: // sucssess일 때
+			return { ...state, history: action.payload }; // payload값을 변경
 		default:
 			return state;
 	}
@@ -30,5 +30,15 @@ const youtubeReducer = (state = [], action) => {
 	}
 };
 
-const reducers = combineReducers({ memberReducer, historyReducer, youtubeReducer });
+const modalReducer = (state = { modal: false }, action) => {
+	// state에 들어가는 값은 무조건 객체
+	switch (action.type) {
+		case types.MODAL.start:
+			return { ...state, modal: action.payload };
+		default:
+			return state;
+	}
+};
+
+const reducers = combineReducers({ memberReducer, historyReducer, youtubeReducer, modalReducer });
 export default reducers; // memberReducer의 switch 함수를 combineReducers로 한개의 리듀싱 함수로 묶어서 reducers로 변수정의해서 출력(export)해줌
