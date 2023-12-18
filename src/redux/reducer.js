@@ -41,7 +41,6 @@ const modalReducer = (state = { modal: false }, action) => {
 };
 
 const menuReducer = (state = { menu: false }, action) => {
-	// state에 들어가는 값은 무조건 객체
 	switch (action.type) {
 		case types.MENU.start:
 			return { ...state, menu: action.payload };

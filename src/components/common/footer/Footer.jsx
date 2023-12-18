@@ -2,7 +2,7 @@ import './Footer.scss';
 import { TiSocialInstagram } from 'react-icons/ti';
 import { FaSquareXTwitter } from 'react-icons/fa6';
 import { IoLogoYoutube } from 'react-icons/io';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 export default function Footer() {
 	// 순서5. 전역 store값을 useSelector로 바로 호출 가능
