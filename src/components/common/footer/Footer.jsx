@@ -12,9 +12,9 @@ export default function Footer() {
 
 			<ul>
 				<li>
-					<Link to={{ pathname: 'https://www.naver.com' }} target='_blank'>
+					<a href='https://instagram.com' target='_blank' rel='noopener noreferrer'>
 						<TiSocialInstagram />
-					</Link>
+					</a>
 				</li>
 				<li>
 					<FaSquareXTwitter />
