@@ -16,7 +16,6 @@ export default function Gallery() {
 	const refNav = useRef(null);
 	const gap = useRef(20);
 	const isUser = useRef(myID.current);
-	const [Open, setOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
 	const shortenTxt = useCustomText('shorten');
 	const searched = useRef(false);
@@ -92,7 +91,7 @@ export default function Gallery() {
 										<div
 											className='pic'
 											onClick={() => {
-												setOpen(true);
+												dispatch({ type: types.MODAL.start, payload: true });
 												setIndex(idx);
 											}}>
 											<img
@@ -124,7 +123,7 @@ export default function Gallery() {
 			</Layout>
 
 			{
-				<Modal Open={Open} setOpen={setOpen}>
+				<Modal>
 					{Pics.length !== 0 && (
 						<img
 							src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}
