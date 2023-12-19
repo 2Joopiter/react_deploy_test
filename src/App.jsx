@@ -14,12 +14,14 @@ import * as types from './redux/actionType';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useMedia } from './hooks/useMedia';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function App() {
 	const dispatch = useDispatch();
+	const Dark = useSelector(store => store.darkReducer.dark);
+
 	useEffect(() => {
 		dispatch({ type: types.MEMBERS.start });
 		dispatch({ type: types.HISTORY.start });
@@ -27,11 +29,9 @@ export default function App() {
 		dispatch({ type: types.FLICKR.start, opt: { type: 'user', id: '199646606@N06' } });
 	}, [dispatch]);
 
-	const [Dark, setDark] = useState();
-
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-			<Header Dark={Dark} setDark={setDark} />
+			<Header />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
 			<Route path='/Contact' component={Contact} />
