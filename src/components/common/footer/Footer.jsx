@@ -1,9 +1,8 @@
 import './Footer.scss';
+import { Link } from 'react-router-dom';
 import { TiSocialInstagram } from 'react-icons/ti';
 import { FaSquareXTwitter } from 'react-icons/fa6';
 import { IoLogoYoutube } from 'react-icons/io';
-
-// npm i react-icons (기본 아이콘 설치 가능)
 
 export default function Footer() {
 	return (
@@ -13,7 +12,9 @@ export default function Footer() {
 
 			<ul>
 				<li>
-					<TiSocialInstagram />
+					<Link to={{ pathname: 'https://www.naver.com' }} target='_blank'>
+						<TiSocialInstagram />
+					</Link>
 				</li>
 				<li>
 					<FaSquareXTwitter />

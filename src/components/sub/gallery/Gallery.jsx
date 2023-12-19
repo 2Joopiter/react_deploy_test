@@ -18,31 +18,31 @@ export default function Gallery() {
 	const shortenTxt = useCustomText('shorten');
 	const searched = useRef(false); // 검색함수가 실행됐는지 확인하기 위한 참조객체
 
-	const activateBtn = (e) => {
+	const activateBtn = e => {
 		const btns = refNav.current.querySelectorAll('button');
-		btns.forEach((btn) => btn.classList.remove('on'));
+		btns.forEach(btn => btn.classList.remove('on'));
 		e && e.target.classList.add('on');
 	};
-	const handleInterest = (e) => {
+	const handleInterest = e => {
 		if (e.target.classList.contains('on')) return;
 		isUser.current = '';
 		activateBtn(e);
 		fetchFlickr({ type: 'interest' });
 	};
-	const handleMine = (e) => {
+	const handleMine = e => {
 		if (e.target.classList.contains('on') || isUser.current === myID.current) return;
 		isUser.current = myID.current;
 		activateBtn(e);
 		fetchFlickr({ type: 'user', id: myID.current });
 	};
-	const handleUser = (e) => {
+	const handleUser = e => {
 		if (isUser.current) return;
 		isUser.current = e.target.innerText;
 		activateBtn();
 		fetchFlickr({ type: 'user', id: e.target.innerText });
 	};
 
-	const handleSearch = (e) => {
+	const handleSearch = e => {
 		e.preventDefault();
 		isUser.current = '';
 		activateBtn();
@@ -53,7 +53,7 @@ export default function Gallery() {
 		searched.current = true; // 검색함수가 한번이라도 실행되면 초기값을 true로 변경처리
 	};
 
-	const fetchFlickr = async (opt) => {
+	const fetchFlickr = async opt => {
 		const num = 30;
 		const flickr_api = process.env.REACT_APP_FLICKR_API;
 		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
@@ -108,7 +108,9 @@ export default function Gallery() {
 
 				{/* masonry는 처음 동작할 때 동적인 요소가 만들어지기 전에 미리 설정이 다 되어 있어야 하는데 gutter값을 scss에서 가져오게 되면 데이터를 가져오는 시간이 너무 늦어지게 됨. 따라서 react에서 제어하면 처음 마운트될 때 값이 들어가있으므로 훨씬 빠르게 처리 가능 */}
 				<section className='frameWrap' ref={refFrameWrap}>
-					<Masonry className={'frame'} options={{ transitionDuration: '0.5s', gutter: gap.current }}>
+					<Masonry
+						className={'frame'}
+						options={{ transitionDuration: '0.5s', gutter: gap.current }}>
 						{/* searched 값이 true고 검색결과가 없는 2가지 조건이 동시에 만족해야만 에러메시지 출력 */}
 						{searched.current && Pics.length === 0 ? (
 							<h2>해당 키워드에 해당하는 검색 결과가 없습니다.</h2>
@@ -121,9 +123,11 @@ export default function Gallery() {
 											onClick={() => {
 												setOpen(true);
 												setIndex(idx);
-											}}
-										>
-											<img src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_m.jpg`} alt={pic.title} />
+											}}>
+											<img
+												src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_m.jpg`}
+												alt={pic.title}
+											/>
 										</div>
 										<h2>{shortenTxt(pic.title)}</h2>
 
@@ -131,7 +135,12 @@ export default function Gallery() {
 											<img
 												src={`http://farm${pic.farm}.staticflickr.com/${pic.server}/buddyicons/${pic.owner}.jpg`}
 												alt='사용자 프로필 이미지'
-												onError={(e) => e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif')}
+												onError={e =>
+													e.target.setAttribute(
+														'src',
+														'https://www.flickr.com/images/buddyicon.gif'
+													)
+												}
 											/>
 											<span onClick={handleUser}>{pic.owner}</span>
 										</div>
@@ -146,7 +155,10 @@ export default function Gallery() {
 			{
 				<Modal Open={Open} setOpen={setOpen}>
 					{Pics.length !== 0 && (
-						<img src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`} alt={Pics[Index].title} />
+						<img
+							src={`https://live.staticflickr.com/${Pics[Index].server}/${Pics[Index].id}_${Pics[Index].secret}_b.jpg`}
+							alt={Pics[Index].title}
+						/>
 					)}
 				</Modal>
 			}

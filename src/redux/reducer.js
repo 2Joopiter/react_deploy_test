@@ -8,12 +8,26 @@ const membersReducer = (state = { members: [] }, action) => {
 	else return state;
 };
 
-const historyReducer = (state = { members: [] }, action) => {
+const historyReducer = (state = { history: [] }, action) => {
 	if (action.type === types.HISTORY.start) return state;
 	else if (action.type === types.HISTORY.success) return { ...state, history: action.payload };
 	else if (action.type === types.HISTORY.fail) return { ...state, history: action.payload };
 	else return state;
 };
 
-const reducers = combineReducers({ membersReducer, historyReducer });
+const youtubeReducer = (state = { youtube: [] }, action) => {
+	if (action.type === types.YOUTUBE.start) return state;
+	else if (action.type === types.YOUTUBE.success) return { ...state, youtube: action.payload };
+	else if (action.type === types.YOUTUBE.fail) return { ...state, youtube: action.payload };
+	else return state;
+};
+
+const flickrReducer = (state = { flickr: [] }, action) => {
+	if (action.type === types.FLICKR.start) return state;
+	else if (action.type === types.FLICKR.success) return { ...state, flickr: action.payload };
+	else if (action.type === types.FLICKR.fail) return { ...state, flickr: action.payload };
+	else return state;
+};
+
+const reducers = combineReducers({ membersReducer, historyReducer, youtubeReducer, flickrReducer });
 export default reducers;

@@ -2,15 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import Layout from '../../common/layout/Layout';
 import './Department.scss';
 import { useCustomText } from '../../../hooks/useText';
+import { useSelector } from 'react-redux';
 
 export default function Department() {
-	const [MemberData, setMemberData] = useState([]);
-	const [MemberTit, setMemberTit] = useState('');
 	const path = useRef(process.env.PUBLIC_URL);
 	const combinedTitle = useCustomText('combined');
+	const { historyReducer, membersReducer } = useSelector(store => store);
 
-	const [HistoryTit, setHistoryTit] = useState('');
-	const [HistoryData, setHistoryData] = useState([]);
+	const HistoryTit = Object.keys(historyReducer)[0];
+	const HistoryData = Object.values(historyReducer)[0];
+	const MemberTit = Object.keys(membersReducer)[0];
+	const MemberData = Object.values(membersReducer)[0];
 
 	return (
 		<Layout title={'Department'}>
