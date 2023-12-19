@@ -28,11 +28,10 @@ export default function App() {
 	}, [dispatch]);
 
 	const [Dark, setDark] = useState();
-	const [Toggle, setToggle] = useState(false);
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-			<Header Dark={Dark} setDark={setDark} Toggle={Toggle} setToggle={setToggle} />
+			<Header Dark={Dark} setDark={setDark} />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
 			<Route path='/Contact' component={Contact} />
@@ -42,7 +41,7 @@ export default function App() {
 			<Route path='/Youtube' component={Youtube} />
 			<Route path='/Detail/:id' component={Detail} />
 			<Footer />
-			{Toggle && <Menu setToggle={setToggle} />}
+			<Menu />
 		</div>
 	);
 }
