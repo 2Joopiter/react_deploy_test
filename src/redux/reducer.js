@@ -8,6 +8,12 @@ const membersReducer = (state = { members: [] }, action) => {
 	else return state;
 };
 
-const reducers = combineReducers({ membersReducer });
-export default reducers;
+const historyReducer = (state = { members: [] }, action) => {
+	if (action.type === types.HISTORY.start) return state;
+	else if (action.type === types.HISTORY.success) return { ...state, history: action.payload };
+	else if (action.type === types.HISTORY.fail) return { ...state, history: action.payload };
+	else return state;
+};
 
+const reducers = combineReducers({ membersReducer, historyReducer });
+export default reducers;

@@ -16,13 +16,13 @@ import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
 import { useEffect, useState } from 'react';
 import { useMedia } from './hooks/useMedia';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 export default function App() {
 	const dispatch = useDispatch();
-	useSelector(store => console.log(store));
 	useEffect(() => {
 		dispatch({ type: types.MEMBERS.start });
+		dispatch({ type: types.HISTORY.start });
 	}, [dispatch]);
 
 	const [Dark, setDark] = useState();
