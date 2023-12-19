@@ -12,7 +12,7 @@ import * as types from './actionType';
 
 // 순서1: 초기 액션 타입을 인지해서 fecthing 관련 메서드 대신 호출해주는 함수 정의
 function* callMembers() {
-	yield takeLatest('types.MEMBERS.start', returnMembers);
+	yield takeLatest(types.MEMBERS.start, returnMembers);
 }
 
 // 순서2: 데이터를 fetching후 비동기 데이터 상태에 따라 액션객체를 만들어 리듀서로 전달하는 함수 정의
