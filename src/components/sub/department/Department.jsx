@@ -26,7 +26,6 @@ export default function Department() {
 		fetch(`${path.current}/DB/department.json`)
 			.then((data) => data.json())
 			.then((json) => {
-				console.log(json);
 				setMemberTit(Object.keys(json)[0]);
 				setMemberData(Object.values(json)[0]);
 			});
