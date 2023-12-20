@@ -8,6 +8,7 @@ export default function Contact() {
 	const [Traffic, setTraffic] = useState(false); // 값을 반전시키면서 보이고 안 보이게 처리
 	const [View, setView] = useState(false); // 컴포넌트가 재렌더링되어 로드뷰화면/맵화면 전환 처리
 
+	// 참조객체
 	const kakao = useRef(window.kakao); // 카카오 객체를 가져옴(index.html에 연결해둔 것)
 	const marker = useRef(null);
 	const mapInstance = useRef(null);
@@ -80,8 +81,8 @@ export default function Contact() {
 		)
 	});
 
-	// 로드뷰 함수
-	const roadView = useRef(() => {
+	// 로드뷰 출력 함수
+	const roadView = useCallback(() => {
 		new kakao.current.maps.RoadviewClient().getNearestPanoId(
 			mapInfo.current[Index].latlng,
 			100,
@@ -92,18 +93,19 @@ export default function Contact() {
 				);
 			}
 		);
-	});
-
-	// 지도위치 갱신시키는 함수
-	const setCenter = useCallback(() => {
-		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
-		roadView.current();
 	}, [Index]);
 
-	// 컴포넌트 마운트시 참조객체에 담아놓은 돔 프레임에 지도 인스턴트 출력 및 마커 생성
-	// 일일이 제어해야 하는 값을 state 정보값으로 한번에 제어 가능해짐
+	// 지도위치 갱신시키는 함수(가운데 고정)
+	const setCenter = useCallback(() => {
+		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
+		roadView();
+	}, [Index]);
+
+	// Index 변경시마다 지도정보를 갱신해서 화면을 재랜더링해주는 useEffect
 	useEffect(() => {
+		// Index값이 변경된다는 것은 출력할 맵 정보가 변경된다는 의미이므로 기존지도 Frame 안쪽의 정보를 지워서 초기화
 		mapFrame.current.innerHTML = '';
+		viewFrame.current.innerHTML = '';
 		mapInstance.current = new kakao.current.maps.Map(mapFrame.current, {
 			center: mapInfo.current[Index].latlng,
 			level: 3
@@ -111,8 +113,6 @@ export default function Contact() {
 		marker.current.setMap(mapInstance.current);
 		setTraffic(false);
 		setView(false);
-
-		roadView.current();
 
 		mapInstance.current.addControl(
 			new kakao.current.maps.MapTypeControl(),
@@ -126,13 +126,20 @@ export default function Contact() {
 
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
-	}, [setCenter]);
+	}, [Index, setCenter]);
 
+	// Traffic 토글시마다 화면 재렌더링 해주는 useEffect
 	useEffect(() => {
 		Traffic
 			? mapInstance.current.addOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC)
 			: mapInstance.current.removeOverlayMapTypeId(kakao.current.maps.MapTypeId.TRAFFIC);
 	}, [Traffic]);
+
+	// View 토글시마다 화면 재렌더링 해주는 useEffect
+	useEffect(() => {
+		// View 토글시에 무조건 로드뷰 정보를 호출하는 것이 아닌 viewFrame 안의 내용이 없을때만 호출하고 값이 있을때는 기존값을 재활용해서 불필요한 로드뷰의 재호출을 막음 -> 고용량의 이미지 refetching을 방지
+		View && viewFrame.current.children.length === 0 && roadView();
+	}, [View, roadView]);
 
 	return (
 		<Layout title={'Contact'}>
