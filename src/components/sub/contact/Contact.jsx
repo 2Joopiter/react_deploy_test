@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import Layout from '../../common/layout/Layout';
 import emailjs from '@emailjs/browser';
 import './Contact.scss';
+import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function Contact() {
 	const [Index, setIndex] = useState(0); // 버튼 클릭할때마다 화면이 재렌더링되어 순번에 맞게 재출력
@@ -98,8 +99,11 @@ export default function Contact() {
 	// 지도위치 갱신시키는 함수(가운데 고정)
 	const setCenter = useCallback(() => {
 		mapInstance.current.setCenter(mapInfo.current[Index].latlng);
-		roadView();
+		//roadView();
 	}, [Index]);
+
+	//useThrottle로 setCenter함수를 인수로 넣어서 throttling 적용된 새로운 함수로 반환(hof; 고차함수)
+	const throttledSetCenter = useThrottle(setCenter, 100);
 
 	// Index 변경시마다 지도정보를 갱신해서 화면을 재랜더링해주는 useEffect
 	useEffect(() => {
@@ -124,9 +128,10 @@ export default function Contact() {
 		);
 		mapInstance.current.setZoomable(false);
 
-		window.addEventListener('resize', setCenter);
-		return () => window.removeEventListener('resize', setCenter);
-	}, [Index, setCenter]);
+		//resize 이벤트에 Throttle 적용된 함수를 등록 (이벤트 자체는 1초에 60번 발생하지만 핸들러함수는 1초에 2번만 실행됨)
+		window.addEventListener('resize', throttledSetCenter);
+		return () => window.removeEventListener('resize', throttledSetCenter);
+	}, [Index, throttledSetCenter]);
 
 	// Traffic 토글시마다 화면 재렌더링 해주는 useEffect
 	useEffect(() => {
