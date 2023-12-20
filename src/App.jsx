@@ -9,16 +9,28 @@ import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchYoutube } from './redux/youtubeSlice';
+import { fetchMember } from './redux/memberSlice';
+import { fetchHistory } from './redux/historySlice';
 
 import { Route } from 'react-router-dom';
+import { useMedia } from './hooks/useMedia';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState } from 'react';
-import { useMedia } from './hooks/useMedia';
 
 export default function App() {
+	const dispatch = useDispatch();
+	useSelector(store => console.log(store));
 	const [Dark, setDark] = useState();
 	const [Toggle, setToggle] = useState(false);
+
+	useEffect(() => {
+		dispatch(fetchYoutube());
+		dispatch(fetchMember());
+		dispatch(fetchHistory());
+	}, [dispatch]);
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
@@ -36,7 +48,6 @@ export default function App() {
 		</div>
 	);
 }
-
 
 /*
 	리덕스 비동기데이터의 효율적 처리를 위한 대표적인 미들웨어 2가지

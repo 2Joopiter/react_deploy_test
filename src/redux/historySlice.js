@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export const fecthHistory = createAsyncThunk('member/requestMembers', async () => {
+export const fetchHistory = createAsyncThunk('member/requestMembers', async () => {
 	const data = fetch(`${process.env.PUBLIC_URL}/DB//DB/history.json`);
 	const json = await data.json();
 	return json.history;
@@ -13,14 +13,14 @@ const historySlice = createSlice({
 		isLoading: false
 	},
 	extraReducers: {
-		[fecthHistory.pending]: state => {
+		[fetchHistory.pending]: state => {
 			state.isLoading = true;
 		},
-		[fecthHistory.fulfilled]: (state, action) => {
+		[fetchHistory.fulfilled]: (state, action) => {
 			state.isLoading = false;
 			state.data = action.payload;
 		},
-		[fecthHistory.rejected]: (state, action) => {
+		[fetchHistory.rejected]: (state, action) => {
 			state.isLoading = false;
 			state.data = action.payload;
 		}
