@@ -6,12 +6,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import youtubeReducer from './redux/youtubeSlice';
 import memberReducer from './redux/memberSlice';
 import historyReducer from './redux/historySlice';
+import galleryReducer from './redux/gallerySlice';
 
 const store = configureStore({
 	reducer: {
 		youtubue: youtubeReducer,
 		member: memberReducer,
-		history: historyReducer
+		history: historyReducer,
+		gallery: galleryReducer
 	}
 });
 
