@@ -2,7 +2,7 @@ import './Modal.scss';
 import { IoClose } from 'react-icons/io5';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeModal } from '../../../redux/modalSlice';
+import { modalClose } from '../../../redux/modalSlice';
 
 /*
 	AnimatePresence: 모션을 적용할 컴포넌트의 wrapping 컴포넌트 지정
@@ -34,7 +34,7 @@ export default function Modal({ children }) {
 					</motion.div>
 					<span
 						onClick={() => {
-							dispatch(closeModal());
+							dispatch(modalClose());
 						}}>
 						<IoClose />
 					</span>

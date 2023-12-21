@@ -9,7 +9,7 @@ import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchYoutube } from './redux/youtubeSlice';
 import { fetchMember } from './redux/memberSlice';
@@ -23,8 +23,7 @@ import './globalStyles/Reset.scss';
 
 export default function App() {
 	const dispatch = useDispatch();
-	const [Dark, setDark] = useState();
-	const [Toggle, setToggle] = useState(false);
+	const Dark = useSelector(store => store.dark.isDark);
 
 	useEffect(() => {
 		dispatch(fetchYoutube());
@@ -35,7 +34,7 @@ export default function App() {
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-			<Header Dark={Dark} setDark={setDark} Toggle={Toggle} setToggle={setToggle} />
+			<Header />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
 			<Route path='/Contact' component={Contact} />
@@ -45,7 +44,7 @@ export default function App() {
 			<Route path='/Youtube' component={Youtube} />
 			<Route path='/Detail/:id' component={Detail} />
 			<Footer />
-			{Toggle && <Menu setToggle={setToggle} />}
+			<Menu />
 		</div>
 	);
 }
