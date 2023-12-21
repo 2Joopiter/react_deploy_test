@@ -3,10 +3,13 @@ import Masonry from 'react-masonry-component';
 import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
 import { LuSearch } from 'react-icons/lu';
-import Modal from '../../common/modal/Modal';
 import { useCustomText } from '../../../hooks/useText';
+import Modal from '../../common/modal/Modal';
+import { useDispatch } from 'react-redux';
+import { modalOpen } from '../../../redux/modalSlice';
 
 export default function Gallery() {
+	const dispatch = useDispatch();
 	const [Pics, setPics] = useState([]);
 	const myID = useRef('199646606@N06');
 	const refFrameWrap = useRef(null);
@@ -121,7 +124,7 @@ export default function Gallery() {
 										<div
 											className='pic'
 											onClick={() => {
-												setOpen(true);
+												dispatch(modalOpen());
 												setIndex(idx);
 											}}>
 											<img

@@ -23,7 +23,6 @@ import './globalStyles/Reset.scss';
 
 export default function App() {
 	const dispatch = useDispatch();
-	useSelector(store => console.log(store));
 	const [Dark, setDark] = useState();
 	const [Toggle, setToggle] = useState(false);
 
