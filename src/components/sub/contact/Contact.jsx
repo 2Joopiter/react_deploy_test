@@ -127,11 +127,13 @@ export default function Contact() {
 			kakao.current.maps.ControlPosition.RIGHT
 		);
 		mapInstance.current.setZoomable(false);
+	}, [Index]);
+	//resize 이벤트에 Throttle 적용된 함수를 등록 (이벤트 자체는 1초에 60번 발생하지만 핸들러함수는 1초에 2번만 실행됨)
 
-		//resize 이벤트에 Throttle 적용된 함수를 등록 (이벤트 자체는 1초에 60번 발생하지만 핸들러함수는 1초에 2번만 실행됨)
+	useEffect(() => {
 		window.addEventListener('resize', throttledSetCenter);
 		return () => window.removeEventListener('resize', throttledSetCenter);
-	}, [Index, throttledSetCenter]);
+	}, [throttledSetCenter]);
 
 	// Traffic 토글시마다 화면 재렌더링 해주는 useEffect
 	useEffect(() => {
