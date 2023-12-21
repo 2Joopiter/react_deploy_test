@@ -9,12 +9,12 @@ import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchYoutube } from './redux/youtubeSlice';
 import { fetchMember } from './redux/memberSlice';
 import { fetchHistory } from './redux/historySlice';
-import { fetchFlickr } from './redux/gallerySlice';
+import { fetchFlickr } from './redux/flickrSlice';
 
 import { Route } from 'react-router-dom';
 import { useMedia } from './hooks/useMedia';
@@ -26,18 +26,12 @@ export default function App() {
 	useSelector(store => console.log(store));
 	const [Dark, setDark] = useState();
 	const [Toggle, setToggle] = useState(false);
-	const promiseArr = useRef([fetchYoutube(), fetchMember(), fetchHistory(), fetchFlickr()]);
 
 	useEffect(() => {
-		Promise.all(promiseArr.current).then(arr => {
-			arr.forEach(action => dispatch(action));
-		});
-		/*
 		dispatch(fetchYoutube());
 		dispatch(fetchMember());
 		dispatch(fetchHistory());
-		dispatch(fetchFlickr());
-		*/
+		dispatch(fetchFlickr({ type: 'interest' }));
 	}, [dispatch]);
 
 	return (

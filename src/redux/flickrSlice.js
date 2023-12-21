@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export const fetchFlickr = createAsyncThunk('gallery/requestGallery', async opt => {
+export const fetchFlickr = createAsyncThunk('flickr', async opt => {
 	const num = 30;
 	const flickr_api = process.env.REACT_APP_FLICKR_API;
 	const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
@@ -19,11 +19,11 @@ export const fetchFlickr = createAsyncThunk('gallery/requestGallery', async opt 
 
 	const data = await fetch(url);
 	const json = await data.json();
-	return json.items;
+	return json.photos.photo;
 });
 
-const gallerySlice = createSlice({
-	name: 'member',
+const flickrSlice = createSlice({
+	name: 'flickr',
 	initialState: {
 		data: [],
 		isLoading: false
@@ -43,4 +43,4 @@ const gallerySlice = createSlice({
 	}
 });
 
-export default gallerySlice.reducer;
+export default flickrSlice.reducer;
