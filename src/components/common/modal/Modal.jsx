@@ -13,7 +13,7 @@ import { modalClose } from '../../../redux/modalSlice';
 */
 export default function Modal({ children }) {
 	const dispatch = useDispatch();
-	const Open = useSelector(store => store.modalReducer.open);
+	const Open = useSelector(store => store.modal.open);
 
 	return (
 		<AnimatePresence>

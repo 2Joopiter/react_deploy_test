@@ -5,12 +5,13 @@ import './Gallery.scss';
 import { LuSearch } from 'react-icons/lu';
 import { useCustomText } from '../../../hooks/useText';
 import Modal from '../../common/modal/Modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchFlickr } from '../../../redux/flickrSlice';
 import { modalOpen } from '../../../redux/modalSlice';
 
 export default function Gallery() {
 	const dispatch = useDispatch();
-	const [Pics, setPics] = useState([]);
+	const Pics = useSelector(store => store.flickr.data);
 	const myID = useRef('199646606@N06');
 	const refFrameWrap = useRef(null);
 	const refNav = useRef(null);
@@ -29,19 +30,19 @@ export default function Gallery() {
 		if (e.target.classList.contains('on')) return;
 		isUser.current = '';
 		activateBtn(e);
-		fetchFlickr({ type: 'interest' });
+		dispatch(fetchFlickr({ type: 'interest' }));
 	};
 	const handleMine = e => {
 		if (e.target.classList.contains('on') || isUser.current === myID.current) return;
 		isUser.current = myID.current;
 		activateBtn(e);
-		fetchFlickr({ type: 'user', id: myID.current });
+		dispatch(fetchFlickr({ type: 'user', id: myID.current }));
 	};
 	const handleUser = e => {
 		if (isUser.current) return;
 		isUser.current = e.target.innerText;
 		activateBtn();
-		fetchFlickr({ type: 'user', id: e.target.innerText });
+		dispatch(fetchFlickr({ type: 'user', id: e.target.innerText }));
 	};
 
 	const handleSearch = e => {
@@ -51,42 +52,11 @@ export default function Gallery() {
 		const keyword = e.target.children[0].value;
 		if (!keyword.trim()) return;
 		e.target.children[0].value = '';
-		fetchFlickr({ type: 'search', keyword: keyword });
+		dispatch(fetchFlickr({ type: 'search', keyword: keyword }));
 		searched.current = true; // 검색함수가 한번이라도 실행되면 초기값을 true로 변경처리
 	};
-
-	const fetchFlickr = async opt => {
-		const num = 30;
-		const flickr_api = process.env.REACT_APP_FLICKR_API;
-		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
-		const method_interest = 'flickr.interestingness.getList';
-		const method_user = 'flickr.people.getPhotos';
-		const method_search = 'flickr.photos.search';
-		const interestURL = `${baseURL}${method_interest}`;
-		const searchURL = `${baseURL}${method_search}&tags=${opt.keyword}`;
-		const userURL = `${baseURL}${method_user}&user_id=${opt.id}`;
-
-		let url = '';
-
-		opt.type === 'user' && (url = userURL);
-		opt.type === 'interest' && (url = interestURL);
-		opt.type === 'search' && (url = searchURL);
-
-		const data = await fetch(url);
-		const json = await data.json();
-
-		/*
-		if (json.photos.photo.length === 0) {
-			return alert('해당 검색어의 결과값이 없습니다');
-		}
-		*/
-
-		setPics(json.photos.photo);
-	};
-
 	useEffect(() => {
 		refFrameWrap.current.style.setProperty('--gap', gap.current + 'px');
-		fetchFlickr({ type: 'user', id: myID.current });
 	}, []);
 
 	return (
