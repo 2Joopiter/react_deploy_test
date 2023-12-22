@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import Masonry from 'react-masonry-component';
 import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
@@ -19,6 +19,7 @@ export default function Gallery() {
 	const [Index, setIndex] = useState(0);
 	const shortenTxt = useCustomText('shorten');
 	const searched = useRef(false);
+	const [Mounted, setMounted] = useState();
 
 	const activateBtn = e => {
 		const btns = refNav.current.querySelectorAll('button');
@@ -55,7 +56,7 @@ export default function Gallery() {
 		searched.current = true;
 	};
 
-	const fetchFlickr = async opt => {
+	const fetchFlickr = useCallback(async opt => {
 		const num = 30;
 		const flickr_api = process.env.REACT_APP_FLICKR_API;
 		const baseURL = `https://www.flickr.com/services/rest/?&api_key=${flickr_api}&per_page=${num}&format=json&nojsoncallback=1&method=`;
@@ -75,19 +76,14 @@ export default function Gallery() {
 		const data = await fetch(url);
 		const json = await data.json();
 
-		/*
-		if (json.photos.photo.length === 0) {
-			return alert('해당 검색어의 결과값이 없습니다');
-		}
-		*/
-
-		setPics(json.photos.photo);
-	};
+		Mounted && setPics(json.photos.photo);
+	});
 
 	useEffect(() => {
 		refFrameWrap.current.style.setProperty('--gap', gap.current + 'px');
 		fetchFlickr({ type: 'user', id: myID.current });
-	}, []);
+		return () => setMounted(false);
+	}, [Mounted, fetchFlickr]);
 
 	return (
 		<>
