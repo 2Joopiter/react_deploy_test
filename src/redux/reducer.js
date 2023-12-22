@@ -49,11 +49,21 @@ const menuReducer = (state = { menu: false }, action) => {
 	}
 };
 
+const darkReducer = (state = { dark: false }, action) => {
+	switch (action.type) {
+		case types.DARK.start:
+			return { ...state, dark: action.payload };
+		default:
+			return state;
+	}
+};
+
 const reducers = combineReducers({
 	memberReducer,
 	historyReducer,
 	youtubeReducer,
 	modalReducer,
-	menuReducer
+	menuReducer,
+	darkReducer
 });
 export default reducers; // memberReducer의 switch 함수를 combineReducers로 한개의 리듀싱 함수로 묶어서 reducers로 변수정의해서 출력(export)해줌

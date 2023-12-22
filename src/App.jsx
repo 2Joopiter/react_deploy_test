@@ -14,13 +14,13 @@ import * as types from './redux/action';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useRef, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useMedia } from './hooks/useMedia';
 
 export default function App() {
 	const dispatch = useDispatch();
-	const [Dark, setDark] = useState();
+	const Dark = useSelector(store => store.darkReducer.dark);
 	const path = useRef(process.env.PUBLIC_URL);
 
 	const fetchDepartment = useCallback(async () => {
@@ -58,7 +58,7 @@ export default function App() {
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
-			<Header Dark={Dark} setDark={setDark} />
+			<Header />
 			<Route exact path='/' component={MainWrap} />
 			<Route path='/Community' component={Community} />
 			<Route path='/Contact' component={Contact} />
