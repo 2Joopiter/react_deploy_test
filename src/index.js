@@ -3,10 +3,10 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import youtubeReducer from './redux/youtubeSlice';
-import memberReducer from './redux/memberSlice';
-import historyReducer from './redux/historySlice';
-import flickrReducer from './redux/flickrSlice';
+import youtubeReducer, { fetchYoutube } from './redux/youtubeSlice';
+import memberReducer, { fetchMember } from './redux/memberSlice';
+import historyReducer, { fetchHistory } from './redux/historySlice';
+import flickrReducer, { fetchFlickr } from './redux/flickrSlice';
 import modalReducer from './redux/modalSlice';
 import menuReducer from './redux/menuSlice';
 import darkReducer from './redux/darkSlice';
@@ -26,7 +26,7 @@ const store = configureStore({
 ReactDOM.render(
 	<BrowserRouter>
 		<Provider store={store}>
-			<App />
+			<App api={([fetchYoutube], [fetchMember], [fetchHistory], [fetchFlickr])} />
 		</Provider>
 	</BrowserRouter>,
 	document.getElementById('root')

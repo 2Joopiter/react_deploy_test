@@ -11,26 +11,25 @@ import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchYoutube } from './redux/youtubeSlice';
-import { fetchMember } from './redux/memberSlice';
-import { fetchHistory } from './redux/historySlice';
-import { fetchFlickr } from './redux/flickrSlice';
 
 import { Route } from 'react-router-dom';
 import { useMedia } from './hooks/useMedia';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
 
-export default function App() {
+export default function App({ api }) {
 	const dispatch = useDispatch();
 	const Dark = useSelector(store => store.dark.isDark);
 
 	useEffect(() => {
+		/*
 		dispatch(fetchYoutube());
 		dispatch(fetchMember());
 		dispatch(fetchHistory());
-		dispatch(fetchFlickr({ type: 'user', id: '199646606@N06' }));
-	}, [dispatch]);
+		dispatch(fetchFlickr());
+		*/
+		api.forEach(func => dispatch(func()));
+	}, [dispatch, api]);
 
 	return (
 		<div className={`wrap ${Dark ? 'dark' : ''} ${useMedia()}`}>
