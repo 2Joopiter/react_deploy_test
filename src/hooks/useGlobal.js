@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 
+// 전역객체 생성
 export const GlobalContext = createContext();
 
 // 전역객체 생성 후 특정 state 값들을 내부로 전달해주는 wraping 컴포넌트 생성
@@ -9,7 +10,8 @@ export function GlobalProvider({ children }) {
 	const [Dark, setDark] = useState(false);
 
 	return (
-		<GlobalContext.Provider value={(MenuOpen, setMenuOpen, ModalOpen, setModalOpen, Dark, setDark)}>
+		<GlobalContext.Provider
+			value={{ MenuOpen, setMenuOpen, ModalOpen, setModalOpen, Dark, setDark }}>
 			{children}
 		</GlobalContext.Provider>
 	);
