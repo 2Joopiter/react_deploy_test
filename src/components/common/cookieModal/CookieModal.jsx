@@ -5,6 +5,7 @@ import { useCookie } from '../../../hooks/useCookie';
 export default function CookieModal({ wid, ht, children }) {
 	//커스텀 훅으로부터 쿠키확인, 쿠키생성함수 가져옴
 	const { isCookie, setCookie } = useCookie();
+	//setCookie('today', 'done', 0);
 	//체크박스요소를 담을 참조객체 생성
 	const checkEl = useRef(null);
 	//Close의 초기값으로 isCookie의 리턴값 담음 Close(true:쿠키잆음,팝업안보임) Close(false:쿠키없음,팝업보임)
@@ -14,7 +15,7 @@ export default function CookieModal({ wid, ht, children }) {
 	const handleClose = () => {
 		const isChecked = checkEl.current.checked;
 		//함수호출시 체크가되어 있으면 쿠키생성
-		if (isChecked) setCookie('today', 'done', 20);
+		if (isChecked) setCookie('today', 'done', 60 * 60 * 24);
 		//미체크시 쿠키생성무시하고 그냥 팝업만 닫기
 		setClose(true);
 	};
