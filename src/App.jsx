@@ -1,3 +1,5 @@
+import './globalStyles/Variables.scss';
+import './globalStyles/Reset.scss';
 import Header from './components/common/header/Header';
 import MainWrap from './components/main/mainWrap/MainWrap';
 import Community from './components/sub/community/Community';
@@ -9,10 +11,9 @@ import Youtube from './components/sub/youtube/Youtube';
 import Footer from './components/common/footer/Footer';
 import Menu from './components/common/menu/Menu';
 import Detail from './components/sub/youtube/Detail';
+import CookieModal from './components/common/cookieModal/CookieModal';
 
 import { Route } from 'react-router-dom';
-import './globalStyles/Variables.scss';
-import './globalStyles/Reset.scss';
 import { useMedia } from './hooks/useMedia';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -36,6 +37,7 @@ export default function App() {
 				<Route path='/detail/:id' component={Detail} />
 				<Footer />
 				<Menu />
+				<CookieModal wid={300} ht={200}></CookieModal>
 			</div>
 			<ReactQueryDevtools />
 		</QueryClientProvider>
