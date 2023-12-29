@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
 import './CookieModal.scss';
+import { useRef, useState } from 'react';
 import { useCookie } from '../../../hooks/useCookie';
 
 export default function CookieModal({ wid, ht, children }) {
