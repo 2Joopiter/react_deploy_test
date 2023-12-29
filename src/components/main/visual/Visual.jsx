@@ -12,7 +12,14 @@ function Btns() {
 	const swiper = useSwiper();
 	return (
 		<nav className='swiperController'>
-			<button onClick={() => swiper.autoplay.start()}>Start</button>
+			<button
+				onClick={() => {
+					// 다시 롤링 시작버튼 클릭시 delay없이 바로 슬라이드를 넘기고 다시 롤링 시작
+					swiper.slideNext(300);
+					swiper.autoplay.start();
+				}}>
+				Start
+			</button>
 			<button onClick={() => swiper.autoplay.stop()}>Stop</button>
 		</nav>
 	);
@@ -32,7 +39,7 @@ export default function Visual() {
 					}
 				}}
 				autoplay={{
-					delay: 2500,
+					delay: 5000,
 					disableOnInteraction: true
 				}}
 				loop={true}>
