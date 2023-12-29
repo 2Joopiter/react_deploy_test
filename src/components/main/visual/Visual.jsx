@@ -6,33 +6,13 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useCustomText } from '../../../hooks/useText';
-
-function Btns() {
-	const swiper = useSwiper();
-
-	useEffect(() => {
-		swiper.slideNext(300);
-	}, [swiper]);
-
-	return (
-		<nav className='swiperController'>
-			<button
-				onClick={() => {
-					swiper.slideNext(300);
-					swiper.autoplay.start();
-				}}>
-				Start
-			</button>
-			<button onClick={() => swiper.autoplay.stop()}>Stop</button>
-		</nav>
-	);
-}
 
 export default function Visual() {
 	const { youtube } = useSelector(store => store.youtubeReducer);
 	const shortenText = useCustomText('shorten');
+	const swiperRef = useRef(null);
 
 	return (
 		<figure className='Visual'>
@@ -64,15 +44,42 @@ export default function Visual() {
 								</div>
 								<div className='txtBox'>
 									<h2>{shortenText(vid.snippet.title, 50)}</h2>
-									<Link to={`/detail/${vid.id}`}>View Detail</Link>
+									<Link
+										to={`/detail/${vid.id}`}
+										onMouseEnter={swiperRef.current.autoplay.stop}
+										onMouseLeave={swiperRef.current.autoplay.start}>
+										<span></span>View Detail
+									</Link>
 								</div>
 							</div>
 						</SwiperSlide>
 					);
 				})}
 
-				<Btns />
+				<Btns swiperRef={swiperRef} />
 			</Swiper>
 		</figure>
+	);
+}
+
+function Btns({ swiperRef }) {
+	swiperRef.current = useSwiper();
+
+	useEffect(() => {
+		swiperRef.current.init(0);
+		swiperRef.current.slideNext(300);
+	}, [swiperRef]);
+
+	return (
+		<nav className='swiperController'>
+			<button
+				onClick={() => {
+					swiperRef.current.slideNext(300);
+					swiperRef.current.autoplay.start();
+				}}>
+				start
+			</button>
+			<button onClick={() => swiperRef.current.autoplay.stop()}>stop</button>
+		</nav>
 	);
 }
