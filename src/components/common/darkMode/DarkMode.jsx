@@ -1,7 +1,7 @@
 import './DarkMode.scss';
 import { useEffect } from 'react';
 import { useCookie } from '../../../hooks/useCookie';
-import { useGlobalData } from '../../../hooks/useGlobalData';
+import { useGlobalData } from '../../../hooks/useGlobal';
 
 export default function DarkMode() {
 	const { setCookie, isCookie } = useCookie();
