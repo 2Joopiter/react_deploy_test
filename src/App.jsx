@@ -13,15 +13,16 @@ import Detail from './components/sub/youtube/Detail';
 import { Route } from 'react-router-dom';
 import './globalStyles/Variables.scss';
 import './globalStyles/Reset.scss';
-import { useState } from 'react';
 import { useMedia } from './hooks/useMedia';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useGlobalData } from './hooks/useGlobal';
+import { useCookie } from './hooks/useCookie';
 
 export default function App() {
 	const queryClient = new QueryClient();
 	const { Dark } = useGlobalData();
+	useCookie('today', 'done', 20);
 
 	return (
 		<QueryClientProvider client={queryClient}>
