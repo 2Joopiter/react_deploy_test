@@ -24,5 +24,28 @@
 				}
 			}
 		}
+
+		.swiper-pagination {
+			width: 70%;
+			left: 15%;
+			bottom: 60px;
+
+			span {
+				display: inline-block;
+				width: 10px;
+				height: 10px;
+				margin: 0px 5px;
+				border-radius: 5px;
+				background-color: var(--baseColor);
+				color: var(--bgColor);
+				text-indent: -9999px;
+				cursor: pointer;
+				transition: width 0.5s, background-color 0.5s;
+			}
+
+			span.swiper-pagination-bullet-active {
+				width: 60px;
+			}
+		}
 	}
 }
