@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import Masonry from 'react-masonry-component';
-import Layout from '../../common/layout/Layout';
 import './Gallery.scss';
-import { LuSearch } from 'react-icons/lu';
+import Layout from '../../common/layout/Layout';
 import Modal from '../../common/modal/Modal';
+import Masonry from 'react-masonry-component';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { LuSearch } from 'react-icons/lu';
 import { useCustomText } from '../../../hooks/useText';
 import { useDispatch } from 'react-redux';
 import * as types from '../../../redux/action';
