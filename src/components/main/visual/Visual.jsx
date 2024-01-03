@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Visual() {
+	const num = useRef(5);
 	const { isSuccess, data } = useYoutubeQuery();
 	const [Index, setIndex] = useState(0);
 	const [prevIndex, setPrevIndex] = useState(4);
@@ -24,8 +25,8 @@ export default function Visual() {
 	});
 
 	useEffect(() => {
-		Index === 0 ? setPrevIndex(4) : setPrevIndex(Index - 1);
-		Index === 4 ? setNextIndex(0) : setNextIndex(Index + 1);
+		Index === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(Index - 1);
+		Index === num.current - 1 ? setNextIndex(0) : setNextIndex(Index + 1);
 	}, [Index]);
 
 	return (
@@ -46,7 +47,7 @@ export default function Visual() {
 			<Swiper {...swiperOpt.current}>
 				{isSuccess &&
 					data.map((el, idx) => {
-						if (idx >= 5) return null;
+						if (idx >= num.current - 1) return null;
 						return (
 							<SwiperSlide key={el.id}>
 								<div className='pic'>
