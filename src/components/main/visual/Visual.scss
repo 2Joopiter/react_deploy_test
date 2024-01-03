@@ -10,6 +10,7 @@
 		height: 100%;
 		border: 1px solid blue;
 	}
+
 	.swiper {
 		display: inline-block;
 		width: 70%;
@@ -35,6 +36,7 @@
 						height: 100%;
 						top: 0;
 						left: 0;
+						overflow: hidden;
 
 						img {
 							width: 100%;
