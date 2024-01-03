@@ -6,33 +6,31 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCustomText } from '../../../hooks/useText';
 
+//Visual parent component
 export default function Visual() {
 	const { youtube } = useSelector(store => store.youtubeReducer);
 	const shortenText = useCustomText('shorten');
 	const swiperRef = useRef(null);
 
-	const swiperOption = useRef({});
+	const swiperOption = useRef({
+		modules: [Pagination, Autoplay],
+		pagination: {
+			clickable: true,
+			renderBullet: (index, className) => `<span class=${className}>${index + 1}</span>`
+		},
+		autoplay: { delay: 2000, disableOnInteraction: true },
+		loop: true
+	});
 
 	return (
 		<figure className='Visual'>
-			<Swiper
-				modules={[Pagination, Autoplay]}
-				pagination={{
-					clickable: true,
-					renderBullet: (index, className) => {
-						return `<span class=${className}>${index + 1}</span>`;
-					}
-				}}
-				autoplay={{
-					delay: 5000,
-					disableOnInteraction: true
-				}}
-				loop={true}>
+			<Swiper {...swiperOption.current}>
 				{youtube.map((vid, idx) => {
 					if (idx >= 5) return null;
+
 					return (
 						<SwiperSlide key={vid.id}>
 							<div className='inner'>
@@ -46,10 +44,11 @@ export default function Visual() {
 								</div>
 								<div className='txtBox'>
 									<h2>{shortenText(vid.snippet.title, 50)}</h2>
+
 									<Link
 										to={`/detail/${vid.id}`}
-										onMouseEnter={swiperRef.current.autoplay?.stop}
-										onMouseLeave={swiperRef.current.autoplay?.start}>
+										onMouseEnter={swiperRef.current?.autoplay?.stop}
+										onMouseLeave={swiperRef.current?.autoplay?.start}>
 										<span></span>View Detail
 									</Link>
 								</div>
@@ -64,24 +63,38 @@ export default function Visual() {
 	);
 }
 
+//Swiper control child component
 function Btns({ swiperRef }) {
 	swiperRef.current = useSwiper();
+	const [Rolling, setRolling] = useState(true);
 
-	useEffect(() => {
-		swiperRef.current.init(0);
+	const startRolling = () => {
 		swiperRef.current.slideNext(300);
+		swiperRef.current.autoplay.start();
+		setRolling(true);
+	};
+
+	const stopRolling = () => {
+		swiperRef.current.autoplay.stop();
+		setRolling(false);
+	};
+
+	//Btns 컴포넌트에서 인스턴스의 이벤트문을 활용
+	useEffect(() => {
+		//slide가 바뀔때마다 현재 롤링상태의 활성화 유무에 따라 Rolling State값 변경
+		swiperRef.current.on('slideChange', () => {
+			swiperRef.current.autoplay.running ? setRolling(true) : setRolling(false);
+		});
 	}, [swiperRef]);
 
 	return (
 		<nav className='swiperController'>
-			<button
-				onClick={() => {
-					swiperRef.current.slideNext(300);
-					swiperRef.current.autoplay.start();
-				}}>
-				start
-			</button>
-			<button onClick={() => swiperRef.current.autoplay.stop()}>stop</button>
+			{/* Rolling state 값에 따라서 버튼 활성화 처리 */}
+			{Rolling ? (
+				<button onClick={stopRolling}>stop</button>
+			) : (
+				<button onClick={startRolling}>start</button>
+			)}
 		</nav>
 	);
 }
@@ -97,5 +110,3 @@ function Btns({ swiperRef }) {
 // JSX를 커스텀해서 만드는 리액트 전용 메서드 예시
 // React.createElement('태그명', {...props}, children)
 // React.createElement('p',{className:'abc'},'text') -> <p className='abc'>text</p>
-
-

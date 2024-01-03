@@ -28,8 +28,8 @@
 						position: relative;
 						display: flex;
 						opacity: 0;
-						transform: scale(1.5);
-						transition: transform 0.8s 0s, opacity 0.8s 0s;
+						transform: rotateY(90deg) scale(1.5);
+						transition: transform 0.9s 0s, opacity 0.8s 0s;
 
 						> p {
 							width: 100%;
@@ -139,7 +139,7 @@
 				> .inner {
 					.picBox {
 						opacity: 1;
-						transform: scale(1);
+						transform: rotateY(0deg) scale(1);
 					}
 					.txtBox {
 						h2 {
