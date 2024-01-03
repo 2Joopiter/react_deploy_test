@@ -9,6 +9,10 @@
 		width: 30%;
 		height: 100%;
 		padding-left: 15vw;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 2;
 
 		ul {
 			width: 100%;
@@ -43,9 +47,12 @@
 
 	.swiper {
 		display: inline-block;
-		width: 75%;
+		width: 70%;
 		height: 100%;
 		padding: 10vw 0px;
+		position: absolute;
+		top: 0;
+		right: 0;
 
 		.swiper-wrapper {
 			height: inherit;
