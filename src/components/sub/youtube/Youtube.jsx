@@ -30,7 +30,7 @@ export default function Youtube() {
 
 	return (
 		<Layout title={'Youtube'}>
-			{Vids.map((data) => {
+			{Vids.map(data => {
 				const [date, time] = data.snippet.publishedAt.split('T');
 
 				return (
