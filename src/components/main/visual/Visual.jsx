@@ -21,7 +21,7 @@ export default function Visual() {
 			clickable: true,
 			renderBullet: (index, className) => `<span class=${className}>${index + 1}</span>`
 		},
-		autoplay: { delay: 2000, disableOnInteraction: true },
+		autoplay: { delay: 5000, disableOnInteraction: true },
 		loop: true
 	});
 
@@ -82,7 +82,7 @@ function Btns({ swiperRef }) {
 	//Btns 컴포넌트에서 인스턴스의 이벤트문을 활용
 	useEffect(() => {
 		//slide가 바뀔때마다 현재 롤링상태의 활성화 유무에 따라 Rolling State값 변경
-		swiperRef.current.on('slideChange', () => {
+		swiperRef.current.on('click', () => {
 			swiperRef.current.autoplay.running ? setRolling(true) : setRolling(false);
 		});
 	}, [swiperRef]);
