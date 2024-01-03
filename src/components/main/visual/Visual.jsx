@@ -7,6 +7,7 @@ import { Autoplay } from 'swiper';
 
 export default function Visual() {
 	const Vids = useSelector(store => store.youtube.data);
+
 	const swiperOpt = useRef({
 		modules: [Autoplay],
 		autoPlay: { delay: 2000, disableOnInteraction: true },
@@ -44,3 +45,9 @@ export default function Visual() {
 		</figure>
 	);
 }
+
+/*
+Swiper의 props를 통해서 UI 구조가 변경되면 해당 내용은 스크립트를 통해서 동적제어 되고 있기 때문에 일반 css로 반응형 처리 불가
+-breakpoints를 이용해서 브라우저 폭에 따라서 swiper의 option값 변경
+-초기값으로 모바일 버전 옵션 설정하고 breakpoints로 브라우저가 늘어나는 구간마다 옵션값 변경
+*/
