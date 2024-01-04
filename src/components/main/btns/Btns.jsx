@@ -5,7 +5,7 @@ import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function Btns() {
 	const [Num, setNum] = useState(0);
-	const isAutoScroll = useRef(false);
+	const isAutoScroll = useRef(false); // autoScroll이 true이면 활성화, false이면 비활성화
 	const wrap = useRef(null);
 	const secs = useRef(null);
 	const btns = useRef(null);
@@ -63,8 +63,8 @@ export default function Btns() {
 		secs.current = wrap.current.querySelectorAll('.myScroll');
 		setNum(secs.current.length);
 
-		wrap.current.addEventListener('mousewheel', autoScroll);
-		isAutoScroll.current && wrap.current.addEventListener('scroll', throttledActivation);
+		isAutoScroll.current && wrap.current.addEventListener('mousewheel', autoScroll);
+		wrap.current.addEventListener('scroll', throttledActivation);
 
 		return () => {
 			wrap.current.removeEventListener('scroll', throttledActivation);
