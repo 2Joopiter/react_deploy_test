@@ -22,7 +22,8 @@ export default function Visual() {
 			renderBullet: (index, className) => `<span class=${className}>${index + 1}</span>`
 		},
 		autoplay: { delay: 5000, disableOnInteraction: true },
-		loop: true
+		loop: true,
+		loopedSlides: 5
 	});
 
 	return (
