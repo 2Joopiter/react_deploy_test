@@ -18,7 +18,7 @@ export default function Info() {
 	}, [Post]);
 
 	return (
-		<section className='Info'>
+		<section className='Info myScroll'>
 			<div className='showBox'>
 				{Post.map((el, idx) => {
 					const date = JSON.stringify(el.date);
