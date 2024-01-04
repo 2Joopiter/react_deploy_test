@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './Btns.scss';
 import Anime from '../../../asset/anime';
+import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function Btns() {
 	const [Index, setIndex] = useState(0);
@@ -21,14 +22,16 @@ export default function Btns() {
 		});
 	};
 
+	const throttledActivation = useThrottle(activation);
+
 	useEffect(() => {
 		wrap.current = document.querySelector('.wrap');
 		secs.current = document.querySelectorAll('.myScroll');
 		setNum(secs.current.length);
 
-		wrap.current.addEventListener('scroll', activation);
+		wrap.current.addEventListener('scroll', throttledActivation);
 		return () => wrap.current.removeEventListener('scroll', activation);
-	}, []);
+	}, [throttledActivation]);
 
 	return (
 		<div className='Btns' ref={btns}>
@@ -40,7 +43,11 @@ export default function Btns() {
 							key={idx}
 							className={idx === Index ? 'on' : ''}
 							onClick={() => {
-								new Anime(wrap.current, { scroll: secs.current[idx].offsetTop }, { duration: 350 });
+								new Anime(
+									wrap.current,
+									{ scroll: secs.current[idx].offsetTop },
+									{ duration: 500, ease: [0.26, 0.1, 1, 1.5] }
+								);
 							}}></li>
 					);
 				})}
