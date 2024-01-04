@@ -2,27 +2,30 @@ import './Visual.scss';
 import 'swiper/css';
 import { useYoutubeQuery } from '../../../hooks/useYoutubeQuery';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper';
 import { useRef, useState } from 'react';
 
 export default function Visual() {
 	const num = useRef(5);
-	const swiperRef = useRef(null);
+	const swipeRef = useRef(null);
 	const { isSuccess, data } = useYoutubeQuery();
-	const [prevIndex, setPrevIndex] = useState(1);
+	const [PrevIndex, setPrevIndex] = useState(1);
 	const [Index, setIndex] = useState(2);
-	const [nextIndex, setNextIndex] = useState(3);
+	const [NextIndex, setNextIndex] = useState(3);
 
 	const swiperOpt = useRef({
+		modules: [Autoplay],
 		loop: true,
 		slidesPerView: 1,
 		spaceBetween: 50,
 		centeredSlides: true,
-		onSwiper: swiper => (swiperRef.current = swiper),
+		onSwiper: swiper => (swipeRef.current = swiper),
 		onSlideChange: swiper => {
 			setIndex(swiper.realIndex);
-			swiper.realIndex === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(Index - 1);
-			swiper.realIndex === num.current - 1 ? setNextIndex(0) : setNextIndex(Index + 1);
+			swiper.realIndex === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(swiper.realIndex - 1);
+			swiper.realIndex === num.current - 1 ? setNextIndex(0) : setNextIndex(swiper.realIndex + 1);
 		},
+		autoplay: { delay: 2000, disableOnInteraction: true },
 		breakpoints: {
 			1000: { slidesPerView: 2 },
 			1400: { slidesPerView: 3 }
@@ -70,20 +73,19 @@ export default function Visual() {
 						);
 					})}
 			</Swiper>
-
 			<nav className='preview'>
 				{isSuccess && (
 					<>
-						<p className='prevBox' onClick={() => swiperRef.current.slidePrev(400)}>
+						<p className='prevBox' onClick={() => swipeRef.current.slidePrev(400)}>
 							<img
-								src={data[prevIndex].snippet.thumbnails.default.url}
-								alt={data[prevIndex].snippet.title}
+								src={data[PrevIndex].snippet.thumbnails.default.url}
+								alt={data[PrevIndex].snippet.title}
 							/>
 						</p>
-						<p className='nextBox' onClick={() => swiperRef.current.slideNext(400)}>
+						<p className='nextBox' onClick={() => swipeRef.current.slideNext(400)}>
 							<img
-								src={data[nextIndex].snippet.thumbnails.default.url}
-								alt={data[nextIndex].snippet.title}
+								src={data[NextIndex].snippet.thumbnails.default.url}
+								alt={data[NextIndex].snippet.title}
 							/>
 						</p>
 					</>
