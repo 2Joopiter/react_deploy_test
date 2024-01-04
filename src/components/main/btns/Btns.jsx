@@ -9,7 +9,7 @@ export default function Btns() {
 	const wrap = useRef(null);
 	const secs = useRef(null);
 	const btns = useRef(null);
-	const baseLine = useRef(-window.innerHeight / 3); //현재 섹션의 컨텐츠가 3분의 1 이상 보여야 버튼 활성화. 절반일 땐 2
+	const baseLine = useRef(-window.innerHeight / 2); //현재 섹션의 컨텐츠가 일정부분 이상 보여야 버튼 활성화. 절반일 땐 2, 3분의 1은 3
 	// isMotion.current 값이 true이면 모션중이므로 재실행 방지, false면 모션중이 아니므로 재실행 가능하게 처리
 	const isMotion = useRef(false);
 
@@ -38,7 +38,6 @@ export default function Btns() {
 		);
 	};
 
-	// console.dir(e.currentTarget): 속성값을 다 보여줌
 	const autoScroll = useCallback(
 		e => {
 			const btnsArr = Array.from(btns.current.children);
@@ -55,7 +54,15 @@ export default function Btns() {
 		[Num]
 	);
 
+	const modifyPos = () => {
+		const btnsArr = Array.from(btns.current.children);
+		const activeEl = btns.current.querySelector('li.on');
+		const activeIndex = btnsArr.indexOf(activeEl);
+		wrap.current.scrollTop = secs.current[activeIndex].offsetTop;
+	};
+
 	const throttledActivation = useThrottle(activation);
+	const throttledModifyPos = useThrottle(modifyPos);
 
 	useEffect(() => {
 		wrap.current = document.querySelector('.wrap');
@@ -63,14 +70,16 @@ export default function Btns() {
 		secs.current = wrap.current.querySelectorAll('.myScroll');
 		setNum(secs.current.length);
 
-		isAutoScroll.current && wrap.current.addEventListener('mousewheel', autoScroll);
+		window.addEventListener('resize', throttledModifyPos);
 		wrap.current.addEventListener('scroll', throttledActivation);
+		isAutoScroll.current && wrap.current.addEventListener('mousewheel', autoScroll);
 
 		return () => {
+			window.removeEventListener('resize', throttledModifyPos);
 			wrap.current.removeEventListener('scroll', throttledActivation);
 			wrap.current.removeEventListener('mousewheel', autoScroll);
 		};
-	}, [throttledActivation, autoScroll]);
+	}, [throttledModifyPos, throttledActivation, autoScroll]);
 
 	return (
 		<ul className='Btns' ref={btns}>
