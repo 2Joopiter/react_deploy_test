@@ -19,6 +19,7 @@ export default function Visual() {
 		slidesPerView: 1,
 		spaceBetween: 50,
 		centeredSlides: true,
+		loopedSlides: num.current,
 		onSwiper: swiper => (swipeRef.current = swiper),
 		onSlideChange: swiper => {
 			setIndex(swiper.realIndex);
