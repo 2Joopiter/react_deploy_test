@@ -4,18 +4,18 @@ import Anime from '../../../asset/anime';
 import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function Btns() {
-	const [Index, setIndex] = useState(0);
 	const [Num, setNum] = useState(0);
 
 	const secs = useRef(null);
 	const wrap = useRef(null);
 	const btns = useRef(null);
+	const baseLine = useRef(-window.innerHeight / 3); // 현재 섹션의 컨텐츠가 3분의 1 이상 보일 때 버튼 활성화. 절반 이상일 때 넘어가게 하려면 2로.
 
 	const activation = () => {
 		const scroll = wrap.current.scrollTop;
 
 		secs.current.forEach((sec, idx) => {
-			if (scroll >= secs.current[idx].offsetTop) {
+			if (scroll >= secs.current[idx].offsetTop + baseLine.current) {
 				Array.from(btns.current.children).forEach(btn => btn.classList.remove('on'));
 				btns.current.children[idx].classList.add('on');
 			}
@@ -41,7 +41,7 @@ export default function Btns() {
 					return (
 						<li
 							key={idx}
-							className={idx === Index ? 'on' : ''}
+							className={idx === 0 ? 'on' : ''}
 							onClick={() => {
 								new Anime(
 									wrap.current,
