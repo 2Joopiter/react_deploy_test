@@ -6,23 +6,32 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Visual() {
 	const num = useRef(5);
+	const swiperRef = useRef(null);
 	const { isSuccess, data } = useYoutubeQuery();
-	const [Index, setIndex] = useState(0);
-	const [prevIndex, setPrevIndex] = useState(4);
-	const [nextIndex, setNextIndex] = useState(1);
+	const [prevIndex, setPrevIndex] = useState(1);
+	const [Index, setIndex] = useState(2);
+	const [nextIndex, setNextIndex] = useState(3);
 
 	const swiperOpt = useRef({
 		loop: true,
 		slidesPerView: 1,
 		spaceBetween: 50,
 		centeredSlides: true,
-		//onSwiper: swiper => swiper.slideNext(300),
+		onSwiper: swiper => (swiperRef.current = swiper),
 		onSlideChange: swiper => setIndex(swiper.realIndex),
 		breakpoints: {
 			1000: { slidesPerView: 2 },
 			1400: { slidesPerView: 3 }
 		}
 	});
+
+	const trimTitle = title => {
+		let resultTit = '';
+		if (title.includes('(')) resultTit = title.split('(')[0];
+		else if (title.includes('[')) resultTit = title.split('[')[0];
+		else resultTit = title;
+		return resultTit;
+	};
 
 	useEffect(() => {
 		Index === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(Index - 1);
@@ -38,7 +47,7 @@ export default function Visual() {
 							if (idx >= 5) return null;
 							return (
 								<li key={el.id} className={idx === Index ? 'on' : ''}>
-									<h3>{el.snippet.title}</h3>
+									<h3>{trimTitle(el.snippet.title)}</h3>
 								</li>
 							);
 						})}
@@ -66,13 +75,13 @@ export default function Visual() {
 			<nav className='preview'>
 				{isSuccess && (
 					<>
-						<p className='prevBox'>
+						<p className='prevBox' onClick={() => swiperRef.current.slidePrev(400)}>
 							<img
 								src={data[prevIndex].snippet.thumbnails.default.url}
 								alt={data[prevIndex].snippet.title}
 							/>
 						</p>
-						<p className='nextBox'>
+						<p className='nextBox' onClick={() => swiperRef.current.slideNext(400)}>
 							<img
 								src={data[nextIndex].snippet.thumbnails.default.url}
 								alt={data[nextIndex].snippet.title}

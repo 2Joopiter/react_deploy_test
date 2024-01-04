@@ -124,6 +124,8 @@
 		position: absolute;
 		left: 0;
 		bottom: 5vh;
+		cursor: pointer;
+		z-index: 6;
 
 		img {
 			width: 100%;
@@ -139,6 +141,8 @@
 		position: absolute;
 		right: 0;
 		bottom: 5vh;
+		cursor: pointer;
+		z-index: 6;
 
 		img {
 			width: 100%;
