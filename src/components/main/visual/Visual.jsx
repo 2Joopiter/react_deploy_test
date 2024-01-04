@@ -2,7 +2,7 @@ import './Visual.scss';
 import 'swiper/css';
 import { useYoutubeQuery } from '../../../hooks/useYoutubeQuery';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Visual() {
 	const num = useRef(5);
@@ -18,7 +18,11 @@ export default function Visual() {
 		spaceBetween: 50,
 		centeredSlides: true,
 		onSwiper: swiper => (swiperRef.current = swiper),
-		onSlideChange: swiper => setIndex(swiper.realIndex),
+		onSlideChange: swiper => {
+			setIndex(swiper.realIndex);
+			swiper.realIndex === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(Index - 1);
+			swiper.realIndex === num.current - 1 ? setNextIndex(0) : setNextIndex(Index + 1);
+		},
 		breakpoints: {
 			1000: { slidesPerView: 2 },
 			1400: { slidesPerView: 3 }
@@ -32,11 +36,6 @@ export default function Visual() {
 		else resultTit = title;
 		return resultTit;
 	};
-
-	useEffect(() => {
-		Index === 0 ? setPrevIndex(num.current - 1) : setPrevIndex(Index - 1);
-		Index === num.current - 1 ? setNextIndex(0) : setNextIndex(Index + 1);
-	}, [Index]);
 
 	return (
 		<figure className='Visual'>
