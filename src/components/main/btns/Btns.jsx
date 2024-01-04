@@ -1,14 +1,17 @@
 import './Btns.scss';
 import Anime from '../../../asset/anime';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useThrottle } from '../../../hooks/useThrottle';
 
 export default function Btns() {
 	const [Num, setNum] = useState(0);
+	const isAutoScroll = useRef(false);
 	const wrap = useRef(null);
 	const secs = useRef(null);
 	const btns = useRef(null);
 	const baseLine = useRef(-window.innerHeight / 3); //현재 섹션의 컨텐츠가 3분의 1 이상 보여야 버튼 활성화. 절반일 땐 2
+	// isMotion.current 값이 true이면 모션중이므로 재실행 방지, false면 모션중이 아니므로 재실행 가능하게 처리
+	const isMotion = useRef(false);
 
 	const activation = () => {
 		const scroll = wrap.current.scrollTop;
@@ -22,12 +25,35 @@ export default function Btns() {
 	};
 
 	const moveScroll = idx => {
+		// 초기값이 false이므로 처음 1번 아래코드 실행이 됨
+		if (isMotion.current) return;
+		// 조건문을 통과하자마자 true로 값이 변경됨 > 재호출 안되도록 막음
+		isMotion.current = true;
 		new Anime(
 			wrap.current,
 			{ scroll: secs.current[idx].offsetTop },
-			{ duration: 500, ease: [0.26, 0.1, 1, 1.5] }
+			{ callback: () => (isMotion.current = false) }
+			// 모션함수가 실행되고 모션이 끝나는 순간 실행되는 callback함수로 다시 isMotion의 값을 false로 변경 > 재실행 가능 상태가 됨
+			// isMotion.current 값을 이용해서 모션중에는 중복 함수호출 불가능하도록 모션중 재이벤트 방지 처리
 		);
 	};
+
+	// console.dir(e.currentTarget): 속성값을 다 보여줌
+	const autoScroll = useCallback(
+		e => {
+			const btnsArr = Array.from(btns.current.children);
+			const activeEl = btns.current.querySelector('li.on');
+			//현재 활성화된 버튼의 순번구함
+			const activeIndex = btnsArr.indexOf(activeEl);
+
+			if (e.deltaY > 0) {
+				activeIndex !== Num - 1 && moveScroll(activeIndex + 1);
+			} else {
+				activeIndex !== 0 && moveScroll(activeIndex - 1);
+			}
+		},
+		[Num]
+	);
 
 	const throttledActivation = useThrottle(activation);
 
@@ -37,9 +63,14 @@ export default function Btns() {
 		secs.current = wrap.current.querySelectorAll('.myScroll');
 		setNum(secs.current.length);
 
-		wrap.current.addEventListener('scroll', throttledActivation);
-		return () => wrap.current.removeEventListener('scroll', throttledActivation);
-	}, [throttledActivation]);
+		wrap.current.addEventListener('mousewheel', autoScroll);
+		isAutoScroll.current && wrap.current.addEventListener('scroll', throttledActivation);
+
+		return () => {
+			wrap.current.removeEventListener('scroll', throttledActivation);
+			wrap.current.removeEventListener('mousewheel', autoScroll);
+		};
+	}, [throttledActivation, autoScroll]);
 
 	return (
 		<ul className='Btns' ref={btns}>
