@@ -3,25 +3,38 @@ import './Btns.scss';
 
 export default function Btns() {
 	const [Index, setIndex] = useState(0);
-	const btns = useRef(null);
+	const [Num, setNum] = useState(0);
+
 	const secs = useRef(null);
 	const wrap = useRef(null);
-	const num = useRef(4);
+	const btns = useRef(null);
+
+	const activation = () => {
+		const scroll = wrap.current.scrollTop;
+
+		secs.current.forEach((sec, idx) => {
+			if (scroll >= secs.current[idx].offsetTop) {
+				Array.from(btns.current.children).forEach(btn => btn.classList.remove('on'));
+				btns.current.children[idx].classList.add('on');
+			}
+		});
+	};
 
 	useEffect(() => {
 		wrap.current = document.querySelector('.wrap');
 		secs.current = document.querySelectorAll('.myScroll');
-		wrap.current.addEventListener('scroll', (e) => {
-      
-    });
+		setNum(secs.current.length);
+		wrap.current.addEventListener('scroll', activation);
 	}, []);
 
 	return (
-		<div className='Btns'>
-			{Array(num.current)
+		<div className='Btns' ref={btns}>
+			{Array(Num)
 				.fill()
 				.map((_, idx) => {
-					return <li key={idx} className={idx === Index ? 'on' : ''}></li>;
+					return (
+						<li key={idx} className={idx === Index ? 'on' : ''} onClick={() => setIndex(idx)}></li>
+					);
 				})}
 		</div>
 	);
