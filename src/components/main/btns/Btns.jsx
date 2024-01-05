@@ -23,17 +23,20 @@ export default function Btns(opt) {
 	const isMotion = useRef(false);
 
 	const activation = () => {
-		if (!Mounted) return;
 		const scroll = wrap.current?.scrollTop;
 
-		if (secs.current) {
-			secs.current.forEach((_, idx) => {
-				if (scroll >= secs.current[idx].offsetTop + baseLine.current) {
-					Array.from(btns.current.children).forEach(btn => btn?.classList.remove('on'));
-					btns.current.children[idx].classList.add('on');
-				}
-			});
-		}
+		secs.current.forEach((_, idx) => {
+			if (scroll >= secs.current[idx].offsetTop + baseLine.current) {
+				//아래 구문에서 children이 아닌 querySelectorAll을 써야 되는 이유
+				//children(HTMLCollections반환 LiveDOM) vs querySelectorAll(NodeList반환, Static DOM)
+				//버튼 li요소를 Btns컴포넌트 마운트시 동적으로 생성하기 때문에
+				//만약 컴포넌트 unmounted시 querySelector로 찾은 NodeList는 optionial chaining 처리가능하나
+				//children으로 구한 HTMLCollection은 실시간으로 DOM의 상태값을 추적하기 때문에 optional chaining처리 불가
+				const btnsArr = btns.current?.querySelectorAll('li');
+				btnsArr?.forEach(btn => btn.classList.remove('on'));
+				btns.current?.querySelectorAll('li')[idx]?.classList.add('on');
+			}
+		});
 	};
 
 	const moveScroll = idx => {
@@ -89,7 +92,7 @@ export default function Btns(opt) {
 		setNum(secs.current.length);
 
 		window.addEventListener('resize', throttledModifyPos);
-		Mounted && wrap.current.addEventListener('scroll', throttledActivation);
+		wrap.current.addEventListener('scroll', throttledActivation);
 		isAutoScroll.current && wrap.current.addEventListener('mousewheel', autoScroll);
 
 		return () => {
@@ -102,8 +105,7 @@ export default function Btns(opt) {
 		throttledActivation,
 		autoScroll,
 		resultOpt.current.frame,
-		resultOpt.current.items,
-		Mounted
+		resultOpt.current.items
 	]);
 
 	return (
