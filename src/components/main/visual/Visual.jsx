@@ -9,9 +9,9 @@ export default function Visual() {
 	const num = useRef(7);
 	const swipeRef = useRef(null);
 	const { isSuccess, data } = useYoutubeQuery();
-	const [PrevIndex, setPrevIndex] = useState(1);
-	const [Index, setIndex] = useState(2);
-	const [NextIndex, setNextIndex] = useState(3);
+	const [PrevIndex, setPrevIndex] = useState(0);
+	const [Index, setIndex] = useState(0);
+	const [NextIndex, setNextIndex] = useState(0);
 
 	const swiperOpt = useRef({
 		modules: [Autoplay],
@@ -59,7 +59,7 @@ export default function Visual() {
 			<Swiper {...swiperOpt.current}>
 				{isSuccess &&
 					data.map((el, idx) => {
-						if (idx >= num.current - 1) return null;
+						if (idx >= num.current) return null;
 						return (
 							<SwiperSlide key={el.id}>
 								<div className='pic'>
