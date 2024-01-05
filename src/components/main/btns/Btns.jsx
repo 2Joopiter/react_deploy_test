@@ -24,14 +24,16 @@ export default function Btns(opt) {
 
 	const activation = () => {
 		if (!Mounted) return;
-		const scroll = wrap.current.scrollTop;
+		const scroll = wrap.current?.scrollTop;
 
-		secs.current.forEach((sec, idx) => {
-			if (scroll >= secs.current[idx].offsetTop + baseLine.current) {
-				Array.from(btns.current.children).forEach(btn => btn.classList.remove('on'));
-				btns.current.children[idx].classList.add('on');
-			}
-		});
+		if (secs.current) {
+			secs.current.forEach((_, idx) => {
+				if (scroll >= secs.current[idx].offsetTop + baseLine.current) {
+					Array.from(btns.current.children).forEach(btn => btn?.classList.remove('on'));
+					btns.current.children[idx].classList.add('on');
+				}
+			});
+		}
 	};
 
 	const moveScroll = idx => {
@@ -87,7 +89,7 @@ export default function Btns(opt) {
 		setNum(secs.current.length);
 
 		window.addEventListener('resize', throttledModifyPos);
-		wrap.current.addEventListener('scroll', throttledActivation);
+		Mounted && wrap.current.addEventListener('scroll', throttledActivation);
 		isAutoScroll.current && wrap.current.addEventListener('mousewheel', autoScroll);
 
 		return () => {
@@ -100,7 +102,8 @@ export default function Btns(opt) {
 		throttledActivation,
 		autoScroll,
 		resultOpt.current.frame,
-		resultOpt.current.items
+		resultOpt.current.items,
+		Mounted
 	]);
 
 	return (
