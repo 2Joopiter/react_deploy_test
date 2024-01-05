@@ -7,7 +7,7 @@ export default function Layout({ children, title }) {
 	const refFrame = useRef(null);
 	const refTitle = useRef(null);
 	const splitText = useSplitText();
-	const { scrollTo } = useScroll('.wrap');
+	const { scrollTo, getCurrentScroll, scrollFrame } = useScroll();
 
 	useEffect(() => {
 		scrollTo(0);
@@ -15,7 +15,9 @@ export default function Layout({ children, title }) {
 		setTimeout(() => {
 			refFrame.current?.classList.add('on');
 		}, 300);
-	}, [splitText, title, scrollTo]);
+
+		scrollFrame.current.addEventListener('scroll', () => {});
+	}, [splitText, title, scrollTo, scrollFrame, getCurrentScroll]);
 
 	return (
 		<main ref={refFrame} className={`Layout ${title}`}>
