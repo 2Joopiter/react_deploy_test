@@ -6,7 +6,7 @@ import { Autoplay } from 'swiper';
 import { useRef, useState } from 'react';
 
 export default function Visual() {
-	const num = useRef(8);
+	const num = useRef(7);
 	const swipeRef = useRef(null);
 	const { isSuccess, data } = useYoutubeQuery();
 	const [PrevIndex, setPrevIndex] = useState(1);
@@ -100,7 +100,7 @@ export default function Visual() {
 							<li
 								key={idx}
 								className={idx === Index ? 'on' : ''}
-								onClick={() => swipeRef.current.slideToLoop(idx)}></li>
+								onClick={() => swipeRef.current.slideToLoop(idx, 400)}></li>
 						);
 					})}
 			</ul>

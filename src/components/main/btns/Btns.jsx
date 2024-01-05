@@ -3,13 +3,20 @@ import Anime from '../../../asset/anime';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useThrottle } from '../../../hooks/useThrottle';
 
-export default function Btns() {
-	const [Num, setNum] = useState(0);
-	const isAutoScroll = useRef(false); // autoScroll이 true이면 활성화, false이면 비활성화
+export default function Btns(opt) {
+	const defOpt = useRef({
+		frame: '.wrap',
+		items: '.myScroll',
+		base: -window.innerHeight / 2,
+		isAuto: false
+	});
+	const resultOpt = useRef({ ...defOpt.current, ...opt });
+	const [Num, setNum] = useState(0); // 이 데이터로 인해 화면이 다시 출력되어야 하기에 state 처리
+	const isAutoScroll = useRef(resultOpt.current.isAuto); // autoScroll이 true이면 활성화, false이면 비활성화
 	const wrap = useRef(null);
 	const secs = useRef(null);
 	const btns = useRef(null);
-	const baseLine = useRef(-window.innerHeight / 2); //현재 섹션의 컨텐츠가 일정부분 이상 보여야 버튼 활성화. 절반일 땐 2, 3분의 1은 3
+	const baseLine = useRef(resultOpt.current.base); //현재 섹션의 컨텐츠가 일정부분 이상 보여야 버튼 활성화. 절반일 땐 2, 3분의 1은 3
 	// isMotion.current 값이 true이면 모션중이므로 재실행 방지, false면 모션중이 아니므로 재실행 가능하게 처리
 	const isMotion = useRef(false);
 
@@ -62,12 +69,12 @@ export default function Btns() {
 	};
 
 	const throttledActivation = useThrottle(activation);
-	const throttledModifyPos = useThrottle(modifyPos);
+	const throttledModifyPos = useThrottle(modifyPos, 200);
 
 	useEffect(() => {
-		wrap.current = document.querySelector('.wrap');
+		wrap.current = document.querySelector(resultOpt.current.frame);
 		//btns.current.closest('.wrap'); > 이렇게도 사용 가능. closest: 가장 가까운 클래스를 찾아줌
-		secs.current = wrap.current.querySelectorAll('.myScroll');
+		secs.current = wrap.current.querySelectorAll(resultOpt.current.items);
 		setNum(secs.current.length);
 
 		window.addEventListener('resize', throttledModifyPos);
@@ -79,7 +86,13 @@ export default function Btns() {
 			wrap.current.removeEventListener('scroll', throttledActivation);
 			wrap.current.removeEventListener('mousewheel', autoScroll);
 		};
-	}, [throttledModifyPos, throttledActivation, autoScroll]);
+	}, [
+		throttledModifyPos,
+		throttledActivation,
+		autoScroll,
+		resultOpt.current.frame,
+		resultOpt.current.items
+	]);
 
 	return (
 		<ul className='Btns' ref={btns}>

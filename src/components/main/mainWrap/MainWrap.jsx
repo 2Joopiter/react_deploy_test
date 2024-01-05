@@ -12,6 +12,7 @@ export default function MainWrap() {
 			<Info />
 			<Pics />
 			<Banner />
+			{/* <Btns frame={스크롤 제어할 프레임요소 클래스명} items={스크롤이 걸릴 영역 공통클래스} base={활성화 기준점} isAuto={오토스크롤 유무(boolean : default-false)} */}
 			<Btns />
 		</div>
 	);
