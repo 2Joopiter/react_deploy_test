@@ -75,6 +75,12 @@ export default function Btns(opt) {
 	const throttledModifyPos = useThrottle(modifyPos, 200);
 
 	useEffect(() => {
+		return () => {
+			setMounted(false);
+		};
+	}, []);
+
+	useEffect(() => {
 		wrap.current = document.querySelector(resultOpt.current.frame);
 		//btns.current.closest('.wrap'); > 이렇게도 사용 가능. closest: 가장 가까운 클래스를 찾아줌
 		secs.current = wrap.current.querySelectorAll(resultOpt.current.items);
@@ -85,7 +91,6 @@ export default function Btns(opt) {
 		isAutoScroll.current && wrap.current.addEventListener('mousewheel', autoScroll);
 
 		return () => {
-			setMounted(false);
 			window.removeEventListener('resize', throttledModifyPos);
 			wrap.current.removeEventListener('scroll', throttledActivation);
 			wrap.current.removeEventListener('mousewheel', autoScroll);

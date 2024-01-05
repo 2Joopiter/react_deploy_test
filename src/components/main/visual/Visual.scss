@@ -3,6 +3,8 @@
 	height: calc(100vh - 90px);
 	position: relative;
 	overflow: hidden;
+	margin-top: 50px;
+	margin-bottom: 50px;
 
 	.txtBox {
 		width: 30%;
@@ -37,7 +39,7 @@
 				h3 {
 					font-weight: normal;
 					color: var(--baseColor);
-					margin-bottom: 60px;
+					margin-bottom: 50px;
 				}
 
 				a {
@@ -51,6 +53,7 @@
 					cursor: pointer;
 					transition-duration: 0.5s;
 					transition-delay: 0.5s;
+					margin-bottom: 50px;
 
 					&::before,
 					&::after {
@@ -98,7 +101,7 @@
 		display: inline-block;
 		width: 70%;
 		height: 100%;
-		padding: 13vw 0px;
+		padding: 13vw 15px;
 		position: absolute;
 		top: 0;
 		right: 0;
