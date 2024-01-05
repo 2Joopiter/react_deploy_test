@@ -4,6 +4,7 @@ import { useYoutubeQuery } from '../../../hooks/useYoutubeQuery';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper';
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Visual() {
 	const num = useRef(7);
@@ -51,6 +52,7 @@ export default function Visual() {
 							return (
 								<li key={el.id} className={idx === Index ? 'on' : ''}>
 									<h3>{trimTitle(el.snippet.title)}</h3>
+									<Link to={`/detail/${el.id}`}>View Detail</Link>
 								</li>
 							);
 						})}

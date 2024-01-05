@@ -12,6 +12,8 @@ export default function Btns(opt) {
 	});
 	const resultOpt = useRef({ ...defOpt.current, ...opt });
 	const [Num, setNum] = useState(0); // 이 데이터로 인해 화면이 다시 출력되어야 하기에 state 처리
+	const [Mounted, setMounted] = useState(true);
+
 	const isAutoScroll = useRef(resultOpt.current.isAuto); // autoScroll이 true이면 활성화, false이면 비활성화
 	const wrap = useRef(null);
 	const secs = useRef(null);
@@ -21,6 +23,7 @@ export default function Btns(opt) {
 	const isMotion = useRef(false);
 
 	const activation = () => {
+		if (!Mounted) return;
 		const scroll = wrap.current.scrollTop;
 
 		secs.current.forEach((sec, idx) => {
@@ -82,6 +85,7 @@ export default function Btns(opt) {
 		isAutoScroll.current && wrap.current.addEventListener('mousewheel', autoScroll);
 
 		return () => {
+			setMounted(false);
 			window.removeEventListener('resize', throttledModifyPos);
 			wrap.current.removeEventListener('scroll', throttledActivation);
 			wrap.current.removeEventListener('mousewheel', autoScroll);
