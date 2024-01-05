@@ -22,6 +22,10 @@ export default function Btns(opt) {
 	// isMotion.current 값이 true이면 모션중이므로 재실행 방지, false면 모션중이 아니므로 재실행 가능하게 처리
 	const isMotion = useRef(false);
 
+	//virtualDOM (스크립트를 통해 가상으로 생성한 돔) vs RealDOM (HTML을 통해 생성한 돔) (리액트에서 쓰는 개념)
+	// LiveDOM vs staticDOM (Real DOM)
+	// LiveDOM은 계속해서 속성값이 갱신되는 돔, staticDOM은 변수에 할당된 순간의 정보값으로 고정된 DOM
+
 	const activation = () => {
 		const scroll = wrap.current?.scrollTop;
 
