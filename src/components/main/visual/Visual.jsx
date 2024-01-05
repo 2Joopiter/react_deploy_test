@@ -6,7 +6,7 @@ import { Autoplay } from 'swiper';
 import { useRef, useState } from 'react';
 
 export default function Visual() {
-	const num = useRef(5);
+	const num = useRef(8);
 	const swipeRef = useRef(null);
 	const { isSuccess, data } = useYoutubeQuery();
 	const [PrevIndex, setPrevIndex] = useState(1);
@@ -47,7 +47,7 @@ export default function Visual() {
 				<ul>
 					{isSuccess &&
 						data.map((el, idx) => {
-							if (idx >= 5) return null;
+							if (idx >= num.current) return null;
 							return (
 								<li key={el.id} className={idx === Index ? 'on' : ''}>
 									<h3>{trimTitle(el.snippet.title)}</h3>
@@ -92,6 +92,25 @@ export default function Visual() {
 					</>
 				)}
 			</nav>
+			<ul className='pagination'>
+				{Array(num.current)
+					.fill()
+					.map((_, idx) => {
+						return (
+							<li
+								key={idx}
+								className={idx === Index ? 'on' : ''}
+								onClick={() => swipeRef.current.slideToLoop(idx)}></li>
+						);
+					})}
+			</ul>
+
+			<div className='barFrame'>
+				<p className='bar' style={{ width: (100 / num.current) * (Index + 1) + '%' }}></p>
+			</div>
+			<div className='counter'>
+				<strong>0{Index + 1}</strong>/<span>0{num.current}</span>
+			</div>
 		</figure>
 	);
 }
