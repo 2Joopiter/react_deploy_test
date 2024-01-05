@@ -17,7 +17,7 @@ export function useScroll(frame) {
 	};
 
 	useEffect(() => {
-		frameRef.current = document.querySelector(frame);
+		scrollFrame.current = document.querySelector(frame);
 	}, [frame]);
 
 	//scrollTo 함수를 비구조화 할당으로 뽑아내기 위해서 객체로 묶어 반환
