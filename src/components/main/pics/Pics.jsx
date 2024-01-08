@@ -1,34 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useScroll } from '../../../hooks/useScroll';
 import './Pics.scss';
 export default function Pics() {
 	console.log('Pics');
-	const [Frame, setFrame] = useState(null);
-	const thisEl = useRef(null);
 	const titEl = useRef(null);
 	const titEl2 = useRef(null);
-	const { getCurrentScroll } = useScroll(Frame);
 
-	const handleScroll = useCallback(() => {
-		const scroll = getCurrentScroll(thisEl.current, -window.innerHeight / 2);
-		if (scroll >= 0) {
-			titEl.current.style.transform = `translateX(${scroll}px)`;
-			titEl.current.style.opacity = 1 - scroll / 550;
-			titEl2.current.style.transform = `scale(${1 + scroll / 400}) translateX(${scroll * 0.8}px)`;
-			titEl2.current.style.opacity = 1 - scroll / 1000;
-		}
-	}, [getCurrentScroll]);
+	const customHandleScroll = scroll => {
+		titEl.current.style.transform = `translateX(${scroll}px)`;
+		titEl.current.style.opacity = 1 - scroll / 550;
+		titEl2.current.style.transform = `scale(${1 + scroll / 400}) translateX(${scroll * 0.8}px)`;
+		titEl2.current.style.opacity = 1 - scroll / 1000;
+	};
 
-	useEffect(() => {
-		setFrame(thisEl.current?.closest('.wrap'));
-	}, []);
+	const { refEl } = useScroll(customHandleScroll);
 
-	useEffect(() => {
-		Frame?.addEventListener('scroll', handleScroll);
-		return () => Frame?.removeEventListener('scroll', handleScroll);
-	}, [Frame, handleScroll]);
 	return (
-		<section className='Pics myScroll' ref={thisEl}>
+		<section className='Pics myScroll' ref={refEl}>
 			<h3 className='tit' ref={titEl}>
 				FLICKR
 			</h3>
