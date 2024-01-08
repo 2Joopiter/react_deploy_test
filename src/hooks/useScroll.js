@@ -20,9 +20,7 @@ export function useScroll(customHandler, baseLine = -window.innerHeight / 2) {
 	// 부모요소를 customHandler에 전달한 값을 받음
 	const handleScroll = useCallback(() => {
 		const scroll = getCurrentScroll();
-		if (scroll >= 0) {
-			customHandler(scroll);
-		}
+		customHandler(scroll);
 	}, [getCurrentScroll, customHandler]);
 
 	useEffect(() => {

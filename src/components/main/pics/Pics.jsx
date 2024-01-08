@@ -7,10 +7,12 @@ export default function Pics() {
 
 	// scroll 값을 전달해줌(useScroll에)
 	const customHandleScroll = scroll => {
-		titEl.current.style.transform = `translateX(${scroll}px)`;
-		titEl.current.style.opacity = 1 - scroll / 550;
-		titEl2.current.style.transform = `scale(${1 + scroll / 400}) translateX(${scroll * 0.8}px)`;
-		titEl2.current.style.opacity = 1 - scroll / 1000;
+		if (scroll >= 0) {
+			titEl.current.style.transform = `translateX(${scroll}px)`;
+			titEl.current.style.opacity = 1 - scroll / 550;
+			titEl2.current.style.transform = `scale(${1 + scroll / 400}) translateX(${scroll * 0.8}px)`;
+			titEl2.current.style.opacity = 1 - scroll / 1000;
+		}
 	};
 
 	const { refEl } = useScroll(customHandleScroll);
