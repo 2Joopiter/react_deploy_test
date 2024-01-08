@@ -3,14 +3,13 @@ import { useScroll } from '../../../hooks/useScroll';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function Banner() {
-	const refBanner = useRef(null);
 	const boxEl = useRef(null);
 
 	//frame을 전달하면 getCurrentScroll 값을 가져옴
-	const { getCurrentScroll, Frame } = useScroll();
+	const { getCurrentScroll, Frame, refEl } = useScroll(); // 순서3 - useScroll에서 내보낸 함수를 가져옴
 
 	const handleScroll = useCallback(() => {
-		const scroll = getCurrentScroll(refBanner.current, -window.innerHeight / 2);
+		const scroll = getCurrentScroll(refEl.current, -window.innerHeight / 2);
 		if (scroll >= 0) {
 			boxEl.current.style.transform = `rotate(${scroll / 5}deg) scale(${1 + scroll / 400})`;
 			boxEl.current.style.opacity = 1 - scroll / 400;
@@ -26,7 +25,8 @@ export default function Banner() {
 
 	useScroll();
 	return (
-		<section className='Banner myScroll' ref={refBanner}>
+		// 순서4 - 원하는 요소에 빈 참조객체 연결
+		<section className='Banner myScroll' ref={refEl}>
 			<div className='box' ref={boxEl}></div>
 		</section>
 	);
