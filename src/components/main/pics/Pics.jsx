@@ -2,10 +2,10 @@ import { useRef } from 'react';
 import { useScroll } from '../../../hooks/useScroll';
 import './Pics.scss';
 export default function Pics() {
-	console.log('Pics');
 	const titEl = useRef(null);
 	const titEl2 = useRef(null);
 
+	// scroll 값을 전달해줌(useScroll에)
 	const customHandleScroll = scroll => {
 		titEl.current.style.transform = `translateX(${scroll}px)`;
 		titEl.current.style.opacity = 1 - scroll / 550;

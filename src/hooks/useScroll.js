@@ -2,7 +2,7 @@ import Anime from '../asset/anime';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 // 순서3 - 부모컴포넌트로부터 커스텀 스크롤 함수를 파라미터를 통해 내부로 전달
-export function useScroll(customHandler) {
+export function useScroll(customHandler, baseLine = -window.innerHeight / 2) {
 	const [Frame, setFrame] = useState(null);
 	const refEl = useRef(null);
 
@@ -10,14 +10,11 @@ export function useScroll(customHandler) {
 		Frame && new Anime(Frame, { scroll: targetPos });
 	};
 
-	const getCurrentScroll = useCallback(
-		(baseLine = -window.innerHeight / 2) => {
-			const scroll = Frame.scrollTop - baseLine;
-			const modifiedScroll = scroll - refEl.current?.offsetTop;
-			return modifiedScroll;
-		},
-		[Frame]
-	);
+	const getCurrentScroll = useCallback(() => {
+		const scroll = Frame.scrollTop - baseLine;
+		const modifiedScroll = scroll - refEl.current?.offsetTop;
+		return modifiedScroll;
+	}, [Frame, baseLine]);
 
 	// 순서4 - 전달받은 커스텀스크롤 함수를 내부에 있는 handleScroll 함수 안쪽에 호출해서 내부적으로 getCurrnetScroll값이 반환하고 있는 스크롤값과 연동시켜줌
 	// 부모요소를 customHandler에 전달한 값을 받음
